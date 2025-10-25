@@ -1,1 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @import "tailwindcss";
+
+
+/* Variáveis do tema */
+:root {
+  --color-primary: #3E6D3A; /*Botões, destaques e links ativos*/
+  --color-secondary: #F4EBD0; /*Fundo suave, seções de destaque*/
+  --color-accent: #E67E22; /*Ícones e detalhes de interação*/
+  --color-text: #333333; /*Texto principal*/
+  --color-muted: #777777;/*Texto secundário e placeholders*/
+  --color-background: #FAFAFA; /*Fundo global*/
+
+  --radius-lg: 16px;
+  --radius-md: 8px;
+  --transition: 0.25s ease;
+}
+
+/* Reset minimalista */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif !important;
+    font-style: normal;
+}
+
+body {
+  color: var(--color-text);
+  background-color: var(--color-background);
+  line-height: 1.6;
+}
+
+/* Títulos */
+h1, h2, h3, h4 {
+  color: var(--color-text);
+  font-weight: 650;
+}
+
+/* Botões */
+button, .btn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+button:hover, .btn:hover {
+  background-color: var(--color-accent);
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Cards gerais */
+.card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Inputs */
+input, select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+
+input:focus, select:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+/* Header */
+header {
+  background-color: var(--color-secondary);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+/* Footer */
+footer {
+  background-color: var(--color-secondary);
+  color: var(--color-muted);
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  border-top: 2px solid var(--color-primary);
+}
