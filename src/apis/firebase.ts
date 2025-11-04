@@ -8,7 +8,7 @@ const firebaseConfig = {
   projectId: "larica-b3364",
   storageBucket: "larica-b3364.appspot.com",
   messagingSenderId: "58329ed9b7dc294cc5fd74cf91d450055ffec4c5",
-  appId: "213922994451"
+  appId: "213922994451",
 };
 
 // Inicializa Firebase
