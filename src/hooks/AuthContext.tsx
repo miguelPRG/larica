@@ -23,6 +23,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   initialize: () => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      // Sempre finalize o loading e sincronize o usuário (ou null)
       if (firebaseUser) {
         set({
           user: {
@@ -32,6 +33,8 @@ export const useAuthStore = create<AuthState>((set) => ({
           },
           isLoading: false,
         });
+      } else {
+        set({ user: null, isLoading: false });
       }
     });
     return unsubscribe;

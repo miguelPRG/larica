@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useAuthStore } from "./hooks/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
@@ -6,6 +6,8 @@ import AppRoutes from "./routes/AppRoutes";
 import { useShallow } from "zustand/react/shallow";
 
 export default function App() {
+  // Garante que a animação de carregamento apareça por pelo menos 3 segundos
+  const [minSplashElapsed, setMinSplashElapsed] = useState(false);
   const { isLoading, initialize } = useAuthStore(
     useShallow((state) => ({
       isLoading: state.isLoading,
@@ -18,8 +20,13 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setMinSplashElapsed(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   //Enquanto o sistema verificar se o user está autenticado, mostramos a animação de carregamento
-  if (isLoading) {
+  if (isLoading || !minSplashElapsed) {
     return <LoadingAnimation />;
   }
 

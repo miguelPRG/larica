@@ -1,17 +1,18 @@
 import { motion } from "framer-motion";
-import "../assets/logo-simbol.png";
+import logo from "../assets/logo-simbol.png";
 
-export default function LoadingAnamation() {
+export default function LoadingAnimation() {
   // Animação de carregamento simples usando Framer Motion e logotipo
 
   return (
-    <div className="flex justify-center items-center h-screen bg-white">
+    <div className="flex items-center justify-center h-screen w-screen">
       <motion.img
-        src="../assets/logo-simbol.png"
+        src={logo}
         alt="Loading..."
-        className="w-20 h-20"
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        className="w-50 h-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
       />
     </div>
   );
