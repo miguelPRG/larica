@@ -12,7 +12,7 @@ export default function LoadingAnimation() {
         className="w-50 h-50"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
+        transition={{ duration: 2, ease: "easeOut" }}
       />
     </div>
   );

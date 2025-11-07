@@ -6,27 +6,30 @@ import AppRoutes from "./routes/AppRoutes";
 import { useShallow } from "zustand/react/shallow";
 
 export default function App() {
-  // Garante que a animação de carregamento apareça por pelo menos 3 segundos
-  const [minSplashElapsed, setMinSplashElapsed] = useState(false);
-  const { isLoading, initialize } = useAuthStore(
+  // Garante que a animação de carregamento apareça por pelo menos 2 segundos
+  const [minLoadingTime, setMinLoadingTime] = useState(true);
+  const { initialize } = useAuthStore(
     useShallow((state) => ({
-      isLoading: state.isLoading,
       initialize: state.initialize,
-    }))
+    })),
   );
 
   useEffect(() => {
     const unsubscribe = initialize();
-    return () => unsubscribe();
+    
+    // Timer de 2 segundos para a animação mínima
+    const timer = setTimeout(() => {
+      setMinLoadingTime(false);
+    }, 2000);
+    
+    return () => {
+      unsubscribe();
+      clearTimeout(timer);
+    };
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setMinSplashElapsed(true), 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  //Enquanto o sistema verificar se o user está autenticado, mostramos a animação de carregamento
-  if (isLoading || !minSplashElapsed) {
+  //Enquanto o sistema verificar se o user está autenticado ou o tempo mínimo não passou, mostramos a animação de carregamento
+  if (minLoadingTime) {
     return <LoadingAnimation />;
   }
 
@@ -39,7 +42,7 @@ export default function App() {
           <div className="flex justify-center items-center h-screen bg-dark-main">
             <div
               className="
-              w-30 h-30 
+              w-20 h-20 
               border-4 
               border-light-three 
               border-t-secondary-main 

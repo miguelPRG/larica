@@ -54,8 +54,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error: any) {
       console.error("Erro ao logar:", error.message);
       throw error;
-    } finally {
-      set({ isLoading: false });
     }
   },
 
@@ -66,8 +64,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error: any) {
       console.error("Erro ao deslogar:", error.message);
       throw error;
-    } finally {
-      set({ isLoading: false });
     }
   },
 
@@ -85,8 +81,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error: any) {
       console.error("Erro ao registrar:", error.message);
       throw error;
-    } finally {
-      set({ isLoading: false });
     }
   },
 }));
