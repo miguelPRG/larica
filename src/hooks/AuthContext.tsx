@@ -22,9 +22,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
 
   initialize: () => {
-
     // A função auth.onAuthStateChanged é um listener que é ativado quando o estado de autenticação do firebase(ex: login, logout, etc). Esse listener mudará o estado global do user quando necessário
-    // Depois disso retorna uma função de unsubscribe para limpar o event listener que será utilizada pelo App.tsx que é o consumidor da função initialize 
+    // Depois disso retorna uma função de unsubscribe para limpar o event listener que será utilizada pelo App.tsx que é o consumidor da função initialize
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         set({

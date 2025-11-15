@@ -16,12 +16,12 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = initialize();
-    
+
     // Timer de 2 segundos para a animação mínima
     const timer = setTimeout(() => {
       setMinLoadingTime(false);
     }, 2000);
-    
+
     //limpamos o eventlistner do firebase e o timer
     return () => {
       unsubscribe();
@@ -30,7 +30,7 @@ export default function App() {
   }, []);
 
   // Espera AMBOS: o tempo mínimo E a validação do Firebase
-  if ( minLoadingTime || isLoading) {
+  if (minLoadingTime || isLoading) {
     return <LoadingAnimation />;
   }
 
