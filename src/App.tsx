@@ -6,11 +6,11 @@ import AppRoutes from "./routes/AppRoutes";
 import { useShallow } from "zustand/react/shallow";
 
 export default function App() {
-  // Garante que a animação de carregamento apareça por pelo menos 2 segundos
   const [minLoadingTime, setMinLoadingTime] = useState(true);
-  const { initialize } = useAuthStore(
+  const { initialize, isLoading } = useAuthStore(
     useShallow((state) => ({
       initialize: state.initialize,
+      isLoading: state.isLoading,
     })),
   );
 
@@ -22,19 +22,20 @@ export default function App() {
       setMinLoadingTime(false);
     }, 2000);
     
+    //limpamos o eventlistner do firebase e o timer
     return () => {
       unsubscribe();
       clearTimeout(timer);
     };
   }, []);
 
-  //Enquanto o sistema verificar se o user está autenticado ou o tempo mínimo não passou, mostramos a animação de carregamento
-  if (minLoadingTime) {
+  // Espera AMBOS: o tempo mínimo E a validação do Firebase
+  if ( minLoadingTime || isLoading) {
     return <LoadingAnimation />;
   }
 
   // Depois da verificação, está na hora da inicialização das rotas
-  // As páginas serão carregadas de forma lazy com suspense dentro do AppRoutes
+  // As páginas serão carregadas de forma lazy com suspense dentro do componente AppRoutes
   return (
     <Router>
       <Suspense
