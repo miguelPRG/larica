@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from "react";
-import { useAuthStore } from "./hooks/AuthContext";
+import { useAuth } from "./hooks/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AppRoutes from "./routes/AppRoutes";
@@ -7,7 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 
 export default function App() {
   const [minLoadingTime, setMinLoadingTime] = useState(true);
-  const { initialize, isLoading } = useAuthStore(
+  const { initialize, isLoading } = useAuth(
     useShallow((state) => ({
       initialize: state.initialize,
       isLoading: state.isLoading,
@@ -15,6 +15,7 @@ export default function App() {
   );
 
   useEffect(() => {
+    // Inicializa o listener de autenticação do Firebase
     const unsubscribe = initialize();
 
     // Timer de 2 segundos para a animação mínima
@@ -46,7 +47,7 @@ export default function App() {
               w-20 h-20 
               border-4 
               border-light-three 
-              border-t-secondary-main 
+              border-t-primary-main 
               rounded-full 
               animate-spin
             "

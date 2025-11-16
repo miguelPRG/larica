@@ -22,7 +22,7 @@
   --color-dark-main: #0d0d0d;
   --color-dark-one: #151515;
   --color-dark-two: #3b3b3b;
-  --color-dark-three: #6a6a6a; 
+  --color-dark-three: #6a6a6a;
   --color-dark-four: #575757;
 
   /**Cores Claras**/
@@ -91,10 +91,10 @@ a:hover {
 
 @layer base {
   button {
-   @apply  px-4 py-2 rounded bg-primary-main hover:bg-primary-one transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed;
+    @apply px-4 py-2 rounded-md bg-primary-main hover:bg-primary-one transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
-  input{
+  input {
     @apply w-full px-2 py-2 border rounded bg-dark-one border-dark-four;
   }
 }
