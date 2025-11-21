@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AppRoutes from "./routes/AppRoutes";
 import { useShallow } from "zustand/react/shallow";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 export default function App() {
   const [minLoadingTime, setMinLoadingTime] = useState(true);
@@ -35,28 +37,47 @@ export default function App() {
     return <LoadingAnimation />;
   }
 
+  // cria o QueryClient apenas uma vez
+  const queryClient = useMemo(() =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60 * 5, // 5 minutos
+            cacheTime: 1000 * 60 * 30, // 30 minutos
+            refetchOnWindowFocus: true,
+            refetchOnReconnect: true,
+            retry: 1,
+            suspense: false,
+          } as any, // <- força o TS aceitar cacheTime
+        },
+      }),
+    [],
+  );
+
   // Depois da verificação, está na hora da inicialização das rotas
   // As páginas serão carregadas de forma lazy com suspense dentro do componente AppRoutes
   return (
-    <Router>
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center h-screen bg-dark-main">
-            <div
-              className="
-              w-20 h-20 
-              border-4 
-              border-light-three 
-              border-t-primary-main 
-              rounded-full 
-              animate-spin
-            "
-            ></div>
-          </div>
-        }
-      >
-        <AppRoutes />
-      </Suspense>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center h-screen bg-dark-main">
+              <div
+                className="
+                w-20 h-20 
+                border-4 
+                border-light-three 
+                border-t-primary-main 
+                rounded-full 
+                animate-spin
+              "
+              ></div>
+            </div>
+          }
+        >
+          <AppRoutes />
+        </Suspense>
+      </Router>
+    </QueryClientProvider>
   );
 }

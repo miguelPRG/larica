@@ -5,7 +5,6 @@ import { z } from "zod";
 import { useState } from "react";
 import { useAuth } from "../hooks/AuthContext";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 const registerSchema = z
   .object({

@@ -64,6 +64,6 @@ export const useAuth = create<AuthState>()(
         }
       },
     }),
-    { name: "AuthStore" } // ← este nome aparece nas DevTools e vale pontos!
-  )
+    { name: "AuthStore" }, // ← este nome aparece nas DevTools e vale pontos!
+  ),
 );
