@@ -6,14 +6,14 @@ import { ToastContainer, Bounce } from "react-toastify";
 // Lazy loading das páginas
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 const HomePage = lazy(() => import("../pages/HomePage"));
+const RegisterPage = lazy(() => import("../pages/RegisterPage"));
 
 /**
  * Rota privada: exige usuário autenticado
  */
 function PrivateRoute({ children }: { children: ReactElement }) {
-  
   const email = useAuth((state) => state.user?.email);
-  
+
   if (!email) return <Navigate to="/login" replace />;
   return children;
 }
@@ -47,6 +47,14 @@ export default function AppRoutes() {
           element={
             <PublicRoute>
               <LoginPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <RegisterPage />
             </PublicRoute>
           }
         />

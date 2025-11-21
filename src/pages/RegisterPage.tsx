@@ -5,45 +5,55 @@ import { z } from "zod";
 import { useState } from "react";
 import { useAuth } from "../hooks/AuthContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const loginSchema = z.object({
-  email: z.email("Email válido é obrigatório"),
-  password: z.string().min(1, "A senha é obrigatória"),
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(1, "O nome é obrigatório"),
+    email: z.email("Email válido é obrigatório"),
+    password: z.string().min(6, "A senha precisa ter pelo menos 6 caracteres"),
+    confirmPassword: z.string().min(1, "Confirmação de senha é obrigatória"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type RegisterFormData = z.infer<typeof registerSchema>;
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { registerUser } = useAuth();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
   });
-  const { login } = useAuth();
+
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     setIsSubmitting(true);
     try {
       await toast.promise(
         (async () => {
           await delay(800);
-          const result = await login(data.email, data.password);
+          const result = await registerUser(data.email, data.password, data.name);
           if (!result.success) {
-            throw new Error(result.message || "Credenciais inválidas");
+            throw new Error(result.message || "Erro no registo");
           }
           return result;
         })(),
         {
-          pending: "Carregando ...",
-          success: "Login realizado com sucesso!",
+          pending: "A registar...",
+          success: "Registo efetuado com sucesso!",
           error: {
-            render({ data }) {
-              return "Email ou password inválidos.";
+            render() {
+              return "Falha no registo.";
             },
           },
         },
@@ -59,8 +69,11 @@ export default function LoginPage() {
         <div className="w-60 mb-10">
           <img src={logo} alt="Logo" />
         </div>
-        <div id="oAuthButtons" className="flex flex-col gap-4"></div>
         <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full px-8">
+          <label htmlFor="name">Nome</label>
+          <input id="name" type="text" {...register("name")} />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+
           <label htmlFor="email">Email</label>
           <input id="email" type="email" {...register("email")} />
           {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -114,8 +127,12 @@ export default function LoginPage() {
           </div>
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
+          <label htmlFor="confirmPassword">Confirmar Password</label>
+          <input id="confirmPassword" type={showPassword ? "text" : "password"} {...register("confirmPassword")} />
+          {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+
           <button type="submit" className="mt-5" disabled={isSubmitting}>
-            Entrar
+            Registar
           </button>
         </form>
       </div>

@@ -16,10 +16,9 @@ type AuthState = {
   isLoading: boolean;
   isAuthenticated: boolean;
   user: User | null;
-
+  registerUser: (email: string, password: string, nome: string) => Promise<{ success: boolean; message?: string }>;
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => Promise<void>;
-  register: (email: string, password: string, nome: string) => Promise<{ success: boolean; message?: string }>;
   initialize: () => Unsubscribe;
 };
 
@@ -54,7 +53,7 @@ export const useAuth = create<AuthState>()(
         // o listener acima já limpa automaticamente
       },
 
-      register: async (email, password, nome) => {
+      registerUser: async (email, password, nome) => {
         try {
           const cred = await createUserWithEmailAndPassword(auth, email, password);
           await updateProfile(cred.user, { displayName: nome });
