@@ -1,100 +1,42 @@
+/* index.css */
 @import "tailwindcss";
 
-/* Paleta de Cores - Larica */
+@config "./tailwind.config.ts";
 
-:root {
-  /*Cor Primária*/
-  --color-primary-main: #f36600;
-  --color-primary-one: #f48331;
-  --color-primary-two: #f49f62;
-  --color-primary-three: #f4bc93;
-  --color-primary-four: #f5d8c4;
-
-  /*Cor Secundária*/
-  --color-secondary-main: #25691b;
-  --color-secondary-one: #4f8546;
-  --color-secondary-two: #78a172;
-  --color-secondary-three: #a2bd9e;
-  --color-secondary-four: #cbd9c9;
-
-  /*Cores Escuras*/
-  --color-dark-main: #0d0d0d;
-  --color-dark-one: #151515;
-  --color-dark-two: #3b3b3b;
-  --color-dark-three: #6a6a6a;
-  --color-dark-four: #575757;
-
-  /**Cores Claras**/
-  --color-light-main: #f8f8f8;
-  --color-light-one: #f0f0f0;
-  --color-light-two: #e8e8e8;
-  --color-light-three: #e2e2e2;
-  --color-light-four: #dfdfdf;
-}
-
-/* Reset e Estilos Base */
-
-body {
-  background-color: var(--color-dark-main);
-  color: var(--color-light-main);
-  font-family: "Montserrat", sans-serif;
-  line-height: 1.6;
-}
-
-/* Tipografia */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
-
-h1 {
-  font-size: 2.5rem;
-}
-h2 {
-  font-size: 2rem;
-}
-h3 {
-  font-size: 1.75rem;
-}
-h4 {
-  font-size: 1.5rem;
-}
-h5 {
-  font-size: 1.25rem;
-}
-h6 {
-  font-size: 1rem;
-}
-
-p {
-  margin-bottom: 1rem;
-}
-
-a {
-  color: var(--color-secondary-main);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: var(--color-seco-one);
-}
-
-/* Botões */
-
+/* ====== 1. Estilos globais (agora sim, tudo com Tailwind) ====== */
 @layer base {
-  button {
-    @apply px-4 py-2 rounded-md bg-primary-main hover:bg-primary-one transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed;
+  body {
+    @apply bg-dark-main text-light-main font-sans;
+    line-height: 1.6;
   }
 
-  input {
-    @apply w-full px-2 py-2 border rounded bg-dark-one border-dark-four;
+  h1 { @apply text-5xl font-bold leading-tight mb-8; }
+  h2 { @apply text-4xl font-bold leading-tight mb-6; }
+  h3 { @apply text-3xl font-bold leading-tight mb-6; }
+  h4 { @apply text-2xl font-bold leading-tight mb-4; }
+  h5 { @apply text-xl   font-bold leading-tight mb-4; }
+  h6 { @apply text-lg   font-bold leading-tight mb-4; }
+
+  p  { @apply mb-4 leading-relaxed; }
+
+  a {
+    @apply text-primary-main hover:text-primary-one transition-colors duration-300 no-underline;
+  }
+
+  /* Botões globais (todos os <button> já saem bonitos) */
+  button {
+    @apply px-6 py-3 rounded-lg font-medium text-white bg-primary-main hover:bg-primary-one;
+  }
+
+  /* Inputs, textarea, select */
+  input, textarea, select {
+    @apply w-full px-4 py-3 rounded-lg bg-dark-one border border-dark-four text-light-main placeholder-dark-three;
   }
 }
-@variant dark (&:where(.dark, .dark *));
+
+/* Opcional: componentes reutilizáveis */
+@layer components {
+  .btn-primary   { @apply bg-primary-main hover:bg-primary-one text-white; }
+  .btn-secondary { @apply bg-secondary-main hover:bg-secondary-one text-white; }
+  .card          { @apply bg-dark-one border border-dark-three rounded-xl p-6; }
+}

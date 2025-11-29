@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Search from '../components/Search';
 import Detail from '../pages/Detail';
+import Footer from '../components/Footer';
 
 const HomePage: React.FC = () => {
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<number | null>(null);
@@ -16,9 +17,9 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 font-sans text-gray-800 antialiased dark:bg-gray-900 dark:text-gray-200">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex flex-1 flex-col p-4">
+      <main className="flex flex-1 p-4">
         {selectedRestaurantId ? (
           <Detail restaurantId={selectedRestaurantId} onBack={handleBack} />
         ) : (
@@ -27,6 +28,7 @@ const HomePage: React.FC = () => {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 };

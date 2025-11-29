@@ -1,13 +1,10 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useMemo } from "react";
 import { useAuth } from "./hooks/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AppRoutes from "./routes/AppRoutes";
 import { useShallow } from "zustand/react/shallow";
-import Header from "./components/Header";
-import Search from './components/Search';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useMemo } from "react";
 
 export default function App() {
   const [minLoadingTime, setMinLoadingTime] = useState(true);
@@ -16,6 +13,23 @@ export default function App() {
       initialize: state.initialize,
       isLoading: state.isLoading,
     })),
+  );
+  
+  // cria o QueryClient apenas uma vez (moved before any early return so hooks order stays stable)
+  const queryClient = useMemo(() =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60 * 5, // 5 minutos
+            cacheTime: 1000 * 60 * 30, // 30 minutos
+            refetchOnWindowFocus: true,
+            refetchOnReconnect: true,
+            retry: 1,
+            suspense: false,
+          } as any,
+        },
+      }),
+    [],
   );
 
   useEffect(() => {
@@ -38,23 +52,6 @@ export default function App() {
   if (minLoadingTime || isLoading) {
     return <LoadingAnimation />;
   }
-
-  // cria o QueryClient apenas uma vez
-  const queryClient = useMemo(() =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 1000 * 60 * 5, // 5 minutos
-            cacheTime: 1000 * 60 * 30, // 30 minutos
-            refetchOnWindowFocus: true,
-            refetchOnReconnect: true,
-            retry: 1,
-            suspense: false,
-          } as any, // <- força o TS aceitar cacheTime
-        },
-      }),
-    [],
-  );
 
   // Depois da verificação, está na hora da inicialização das rotas
   // As páginas serão carregadas de forma lazy com suspense dentro do componente AppRoutes

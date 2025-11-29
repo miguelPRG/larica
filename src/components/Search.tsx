@@ -74,10 +74,6 @@ const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
 
   return (
     <div className="w-full max-w-7xl mx-auto transition-all duration-500">
-
-      teste
-
-      
       <Card
         title="Encontre o seu restaurante"
         subtitle="Explore as 10 melhores opções gastronômicas, veja avaliações e escolha onde comer!"
@@ -89,12 +85,12 @@ const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
             value={searchTerm}
             onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setVisibleCount(4); // Reset pagination on search
+                setVisibleCount(4);
             }}
             placeholder="Busque por nome, culinária ou descrição..."
-            className="w-full rounded-full border-2 border-transparent bg-gray-100 py-3 pl-5 pr-14 text-gray-800 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-blue-500 dark:focus:bg-gray-800"
+            className="w-full rounded-full px-4 py-3 bg-dark-one border border-dark-four text-light-main placeholder-dark-three"
           />
-          <div className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-blue-600 p-2 text-white">
+          <div className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-primary-main p-2 text-white">
             <SearchIcon className="h-6 w-6" />
           </div>
         </div>
@@ -129,16 +125,16 @@ const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
           )
         ) : (
           <div className="py-12 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                <SearchIcon className="h-8 w-8 text-gray-400" />
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-dark-two">
+                <SearchIcon className="h-8 w-8 text-dark-three" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Nenhum restaurante encontrado</h3>
-            <p className="text-gray-500 dark:text-gray-400">
+            <h3 className="text-lg font-medium text-light-main">Nenhum restaurante encontrado</h3>
+            <p className="text-dark-three">
                 Tente ajustar sua busca ou filtros para encontrar o que procura.
             </p>
             <button 
                 onClick={() => {setSearchTerm(''); setSelectedCuisine(null);}}
-                className="mt-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                className="btn-secondary mt-4"
             >
                 Limpar todos os filtros
             </button>
@@ -150,11 +146,11 @@ const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
           <div className="mt-10 flex justify-center">
             <button
               onClick={handleLoadMore}
-              className="group relative overflow-hidden rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+              className="btn-primary"
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 Mais registros
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
