@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AppRoutes from "./routes/AppRoutes";
 import { useShallow } from "zustand/react/shallow";
+import Header from "./components/Header";
+import Search from './components/Search';
 
 export default function App() {
   // Garante que a animação de carregamento apareça por pelo menos 2 segundos
@@ -32,7 +34,7 @@ export default function App() {
   if (minLoadingTime) {
     return <LoadingAnimation />;
   }
-
+  
   // Depois da verificação, está na hora da inicialização das rotas
   // As páginas serão carregadas de forma lazy com suspense dentro do AppRoutes
   return (
