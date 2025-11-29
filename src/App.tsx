@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AppRoutes from "./routes/AppRoutes";
 import { useShallow } from "zustand/react/shallow";
+import Header from "./components/Header";
+import Search from './components/Search';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useMemo } from "react";
 

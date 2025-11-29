@@ -1,29 +1,34 @@
-import { useAuth } from "../hooks/AuthContext";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import Header from '../components/Header';
+import Search from '../components/Search';
+import Detail from '../pages/Detail';
 
-export default function HomePage() {
-  const logout = useAuth((state) => state.logout);
-  const navigate = useNavigate();
+const HomePage: React.FC = () => {
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState<number | null>(null);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate("/login");
-    } catch (error) {
-      console.error("Erro ao fazer logout:", error);
-    }
+  const handleRestaurantSelect = (id: number) => {
+    setSelectedRestaurantId(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBack = () => {
+    setSelectedRestaurantId(null);
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-semibold">Home</h1>
-      <p>Bem-vindo!</p>
-      <button
-        onClick={handleLogout}
-        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-      >
-        Logout
-      </button>
+    <div className="flex min-h-screen flex-col bg-gray-50 font-sans text-gray-800 antialiased dark:bg-gray-900 dark:text-gray-200">
+      <Header />
+      <main className="flex flex-1 flex-col p-4">
+        {selectedRestaurantId ? (
+          <Detail restaurantId={selectedRestaurantId} onBack={handleBack} />
+        ) : (
+          <div className="flex flex-1 items-center justify-center">
+            <Search onSelectRestaurant={handleRestaurantSelect} />
+          </div>
+        )}
+      </main>
     </div>
   );
-}
+};
+
+export default HomePage;

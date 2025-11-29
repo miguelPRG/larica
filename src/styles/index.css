@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@config "../../tailwindcss.config.ts";
 
 /* Paleta de Cores - Larica */
 
@@ -98,3 +97,4 @@ a:hover {
     @apply w-full px-2 py-2 border rounded bg-dark-one border-dark-four;
   }
 }
+@variant dark (&:where(.dark, .dark *));
