@@ -7,9 +7,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
-  User,
+  type User,
   onAuthStateChanged,
-  Unsubscribe,
+  type Unsubscribe,
 } from "firebase/auth";
 
 type AuthState = {
@@ -30,12 +30,23 @@ export const useAuth = create<AuthState>()(
       user: null,
 
       initialize: () => {
-        return onAuthStateChanged(auth, (firebaseUser) => {
-          set({
-            user: firebaseUser,
-            isAuthenticated: !!firebaseUser,
-            isLoading: false,
-          });
+        return onAuthStateChanged(auth, async (firebaseUser) => {
+          if (firebaseUser) {
+            // Recarrega os dados do usuário para garantir que temos as informações mais recentes
+            await firebaseUser.reload();
+            const updatedUser = auth.currentUser;
+            set({
+              user: updatedUser,
+              isAuthenticated: true,
+              isLoading: false,
+            });
+          } else {
+            set({
+              user: null,
+              isAuthenticated: false,
+              isLoading: false,
+            });
+          }
         });
       },
 
@@ -50,14 +61,20 @@ export const useAuth = create<AuthState>()(
 
       logout: async () => {
         await auth.signOut();
-        // o listener acima já limpa automaticamente
+        // O onAuthStateChanged vai limpar automaticamente o estado
       },
 
       registerUser: async (email, password, nome) => {
         try {
+          // 1. Cria o usuário com e-mail e senha
           const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+          // 2. Atualiza o perfil do usuário recém-criado, definindo o displayName
           await updateProfile(cred.user, { displayName: nome });
+
+          // 3. Recarrega os dados do usuário - o onAuthStateChanged vai atualizar automaticamente
           await cred.user.reload();
+
           return { success: true };
         } catch (error: any) {
           return { success: false, message: error.message ?? "Erro no registo" };

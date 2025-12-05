@@ -1,4 +1,3 @@
-
 export interface Restaurant {
   id: number;
   name: string;
@@ -25,7 +24,7 @@ export const restaurants: Restaurant[] = [
     longitude: -8.653783,
     website: "www.salpoente.pt",
     phone: "+351 234 382 674",
-    email: "reservas@salpoente.pt"
+    email: "reservas@salpoente.pt",
   },
   {
     id: 2,
@@ -34,11 +33,11 @@ export const restaurants: Restaurant[] = [
     description: "Pratos locais com um toque moderno no coração de Aveiro.",
     rating: 4.8,
     cuisine: "Portuguesa",
-    latitude: 40.641200,
-    longitude: -8.654500,
+    latitude: 40.6412,
+    longitude: -8.6545,
     website: "www.obairro.pt",
     phone: "+351 234 423 123",
-    email: "geral@obairro.pt"
+    email: "geral@obairro.pt",
   },
   {
     id: 3,
@@ -47,11 +46,11 @@ export const restaurants: Restaurant[] = [
     description: "Sushi de alta qualidade com vista para os canais da ria.",
     rating: 4.9,
     cuisine: "Japonesa",
-    latitude: 40.642800,
-    longitude: -8.656200,
+    latitude: 40.6428,
+    longitude: -8.6562,
     website: "www.subenshi.pt",
     phone: "+351 964 123 456",
-    email: "aveiro@subenshi.pt"
+    email: "aveiro@subenshi.pt",
   },
   {
     id: 4,
@@ -60,11 +59,11 @@ export const restaurants: Restaurant[] = [
     description: "Especialidade em peixes frescos e mariscos da região.",
     rating: 4.7,
     cuisine: "Frutos do Mar",
-    latitude: 40.643500,
-    longitude: -8.652000,
+    latitude: 40.6435,
+    longitude: -8.652,
     website: "www.caisdopescado.pt",
     phone: "+351 234 000 001",
-    email: "info@caisdopescado.pt"
+    email: "info@caisdopescado.pt",
   },
   {
     id: 5,
@@ -73,11 +72,11 @@ export const restaurants: Restaurant[] = [
     description: "Ambiente acolhedor servindo o melhor da cozinha tradicional.",
     rating: 4.6,
     cuisine: "Portuguesa",
-    latitude: 40.639800,
-    longitude: -8.651000,
+    latitude: 40.6398,
+    longitude: -8.651,
     website: "www.obatel.pt",
     phone: "+351 234 000 002",
-    email: "contacto@obatel.pt"
+    email: "contacto@obatel.pt",
   },
   {
     id: 6,
@@ -86,11 +85,11 @@ export const restaurants: Restaurant[] = [
     description: "Sabores picantes e vibrantes do México perto da universidade.",
     rating: 4.4,
     cuisine: "Mexicana",
-    latitude: 40.630500,
-    longitude: -8.657500,
+    latitude: 40.6305,
+    longitude: -8.6575,
     website: "www.tacoloco.pt",
     phone: "+351 234 000 003",
-    email: "ola@tacoloco.pt"
+    email: "ola@tacoloco.pt",
   },
   {
     id: 7,
@@ -99,11 +98,11 @@ export const restaurants: Restaurant[] = [
     description: "Hambúrgueres artesanais suculentos e batatas rústicas.",
     rating: 4.5,
     cuisine: "Americana",
-    latitude: 40.638200,
-    longitude: -8.649500,
+    latitude: 40.6382,
+    longitude: -8.6495,
     website: "www.burgercorner.pt",
     phone: "+351 234 000 004",
-    email: "pedidos@burgercorner.pt"
+    email: "pedidos@burgercorner.pt",
   },
   {
     id: 9,
@@ -112,11 +111,11 @@ export const restaurants: Restaurant[] = [
     description: "Pizza em forno a lenha com ingredientes italianos importados.",
     rating: 4.8,
     cuisine: "Italiana",
-    latitude: 40.637000,
-    longitude: -8.655000,
+    latitude: 40.637,
+    longitude: -8.655,
     website: "www.mammamia-aveiro.pt",
     phone: "+351 234 000 006",
-    email: "ciao@mammamia.pt"
+    email: "ciao@mammamia.pt",
   },
   {
     id: 10,
@@ -125,11 +124,11 @@ export const restaurants: Restaurant[] = [
     description: "Opções saudáveis, vegetarianas e veganas com produtos locais.",
     rating: 4.9,
     cuisine: "Vegetariana",
-    latitude: 40.641500,
-    longitude: -8.650500,
+    latitude: 40.6415,
+    longitude: -8.6505,
     website: "www.greenlife.pt",
     phone: "+351 234 000 007",
-    email: "veggie@greenlife.pt"
+    email: "veggie@greenlife.pt",
   },
   {
     id: 11,
@@ -138,11 +137,11 @@ export const restaurants: Restaurant[] = [
     description: "Vista para a ria e os melhores mariscos da costa.",
     rating: 4.6,
     cuisine: "Frutos do Mar",
-    latitude: 40.645500,
-    longitude: -8.659000,
+    latitude: 40.6455,
+    longitude: -8.659,
     website: "www.marecheia.pt",
     phone: "+351 234 000 008",
-    email: "reservas@marecheia.pt"
+    email: "reservas@marecheia.pt",
   },
   {
     id: 12,
@@ -151,11 +150,11 @@ export const restaurants: Restaurant[] = [
     description: "Os famosos ovos moles de Aveiro e pão fresco todos os dias.",
     rating: 4.8,
     cuisine: "Padaria",
-    latitude: 40.640200,
-    longitude: -8.653200,
+    latitude: 40.6402,
+    longitude: -8.6532,
     website: "www.padariacentral.pt",
     phone: "+351 234 000 009",
-    email: "encomendas@padariacentral.pt"
+    email: "encomendas@padariacentral.pt",
   },
   {
     id: 13,
@@ -164,11 +163,11 @@ export const restaurants: Restaurant[] = [
     description: "Carnes maturadas grelhadas à perfeição.",
     rating: 4.7,
     cuisine: "Steakhouse",
-    latitude: 40.636500,
-    longitude: -8.648000,
+    latitude: 40.6365,
+    longitude: -8.648,
     website: "www.steakhouseaveiro.pt",
     phone: "+351 234 000 010",
-    email: "grill@steakhouse.pt"
+    email: "grill@steakhouse.pt",
   },
   {
     id: 14,
@@ -177,11 +176,11 @@ export const restaurants: Restaurant[] = [
     description: "Comida asiática rápida e saborosa perto do Fórum.",
     rating: 4.3,
     cuisine: "Chinesa",
-    latitude: 40.639000,
-    longitude: -8.647000,
+    latitude: 40.639,
+    longitude: -8.647,
     website: "www.wokroll.pt",
     phone: "+351 234 000 011",
-    email: "takeaway@wokroll.pt"
+    email: "takeaway@wokroll.pt",
   },
   {
     id: 15,
@@ -190,11 +189,11 @@ export const restaurants: Restaurant[] = [
     description: "Tapas espanholas e vinhos ibéricos.",
     rating: 4.5,
     cuisine: "Espanhola",
-    latitude: 40.642200,
-    longitude: -8.652500,
+    latitude: 40.6422,
+    longitude: -8.6525,
     website: "www.labodeguita.pt",
     phone: "+351 234 000 012",
-    email: "tapas@labodeguita.pt"
+    email: "tapas@labodeguita.pt",
   },
   {
     id: 16,
@@ -203,11 +202,11 @@ export const restaurants: Restaurant[] = [
     description: "Café histórico na Praça do Peixe.",
     rating: 4.6,
     cuisine: "Café",
-    latitude: 40.643800,
-    longitude: -8.654800,
+    latitude: 40.6438,
+    longitude: -8.6548,
     website: "www.cafedapraca.pt",
     phone: "+351 234 000 013",
-    email: "cafe@praca.pt"
+    email: "cafe@praca.pt",
   },
   {
     id: 17,
@@ -216,11 +215,11 @@ export const restaurants: Restaurant[] = [
     description: "Gelados artesanais perfeitos para um passeio à beira-rio.",
     rating: 4.9,
     cuisine: "Sorveteria",
-    latitude: 40.641000,
-    longitude: -8.654000,
+    latitude: 40.641,
+    longitude: -8.654,
     website: "www.gelatariaveneza.pt",
     phone: "+351 234 000 014",
-    email: "gelados@veneza.pt"
+    email: "gelados@veneza.pt",
   },
   {
     id: 18,
@@ -229,11 +228,11 @@ export const restaurants: Restaurant[] = [
     description: "Petiscos portugueses e ambiente familiar.",
     rating: 4.5,
     cuisine: "Portuguesa",
-    latitude: 40.644500,
-    longitude: -8.651500,
+    latitude: 40.6445,
+    longitude: -8.6515,
     website: "www.tasquinhadotio.pt",
     phone: "+351 234 000 015",
-    email: "tio@tasquinha.pt"
+    email: "tio@tasquinha.pt",
   },
   {
     id: 19,
@@ -242,11 +241,11 @@ export const restaurants: Restaurant[] = [
     description: "Autêntico Pad Thai e caril.",
     rating: 4.6,
     cuisine: "Tailandesa",
-    latitude: 40.635500,
-    longitude: -8.650000,
+    latitude: 40.6355,
+    longitude: -8.65,
     website: "www.bangkokstreet.pt",
     phone: "+351 234 000 016",
-    email: "thai@bangkok.pt"
+    email: "thai@bangkok.pt",
   },
   {
     id: 20,
@@ -255,23 +254,23 @@ export const restaurants: Restaurant[] = [
     description: "Sabores mediterrâneos no centro de Aveiro.",
     rating: 4.7,
     cuisine: "Grega",
-    latitude: 40.639500,
-    longitude: -8.655500,
+    latitude: 40.6395,
+    longitude: -8.6555,
     website: "www.ogrego.pt",
     phone: "+351 234 000 017",
-    email: "opa@ogrego.pt"
+    email: "opa@ogrego.pt",
   },
-   {
+  {
     id: 21,
     name: "Ramen House Aveiro",
     image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=500&q=60",
     description: "Ramen quente e reconfortante para os dias frios.",
     rating: 4.8,
     cuisine: "Japonesa",
-    latitude: 40.637500,
-    longitude: -8.652800,
+    latitude: 40.6375,
+    longitude: -8.6528,
     website: "www.ramenhouse.pt",
     phone: "+351 234 000 018",
-    email: "slurp@ramenhouse.pt"
-  }
+    email: "slurp@ramenhouse.pt",
+  },
 ];

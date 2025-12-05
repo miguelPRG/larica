@@ -10,14 +10,28 @@
     line-height: 1.6;
   }
 
-  h1 { @apply text-5xl font-bold leading-tight mb-8; }
-  h2 { @apply text-4xl font-bold leading-tight mb-6; }
-  h3 { @apply text-3xl font-bold leading-tight mb-6; }
-  h4 { @apply text-2xl font-bold leading-tight mb-4; }
-  h5 { @apply text-xl   font-bold leading-tight mb-4; }
-  h6 { @apply text-lg   font-bold leading-tight mb-4; }
+  h1 {
+    @apply text-5xl font-bold leading-tight mb-8;
+  }
+  h2 {
+    @apply text-4xl font-bold leading-tight mb-6;
+  }
+  h3 {
+    @apply text-3xl font-bold leading-tight mb-6;
+  }
+  h4 {
+    @apply text-2xl font-bold leading-tight mb-4;
+  }
+  h5 {
+    @apply text-xl   font-bold leading-tight mb-4;
+  }
+  h6 {
+    @apply text-lg   font-bold leading-tight mb-4;
+  }
 
-  p  { @apply mb-4 leading-relaxed; }
+  p {
+    @apply mb-4 leading-relaxed;
+  }
 
   a {
     @apply text-primary-main hover:text-primary-one transition-colors duration-300 no-underline;
@@ -29,14 +43,22 @@
   }
 
   /* Inputs, textarea, select */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     @apply w-full px-4 py-3 rounded-lg bg-dark-one border border-dark-four text-light-main placeholder-dark-three;
   }
 }
 
 /* Opcional: componentes reutilizáveis */
 @layer components {
-  .btn-primary   { @apply bg-primary-main hover:bg-primary-one text-white; }
-  .btn-secondary { @apply bg-secondary-main hover:bg-secondary-one text-white; }
-  .card          { @apply bg-dark-one border border-dark-three rounded-xl p-6; }
+  .btn-primary {
+    @apply bg-primary-main hover:bg-primary-one text-white;
+  }
+  .btn-secondary {
+    @apply bg-secondary-main hover:bg-secondary-one text-white;
+  }
+  .card {
+    @apply bg-dark-one border border-dark-three rounded-xl p-6;
+  }
 }

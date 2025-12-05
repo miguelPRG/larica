@@ -1,7 +1,6 @@
-
-import React from 'react';
-import { restaurants } from '../data/restaurants';
-import MapView from '../components/MapView';
+import React from "react";
+import { restaurants } from "../data/restaurants";
+import MapView from "../components/MapView";
 
 interface DetailProps {
   restaurantId: number;
@@ -10,23 +9,55 @@ interface DetailProps {
 
 // Simple icons for contact details
 const GlobeIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+    />
   </svg>
 );
 
 const PhoneIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+    />
   </svg>
 );
 
 const MailIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+    />
   </svg>
 );
-
 
 const Detail: React.FC<DetailProps> = ({ restaurantId, onBack }) => {
   const restaurant = restaurants.find((r) => r.id === restaurantId);
@@ -35,10 +66,7 @@ const Detail: React.FC<DetailProps> = ({ restaurantId, onBack }) => {
     return (
       <div className="flex h-64 flex-col items-center justify-center text-center">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Restaurante não encontrado</h2>
-        <button
-          onClick={onBack}
-          className="mt-4 text-blue-600 hover:underline dark:text-blue-400"
-        >
+        <button onClick={onBack} className="mt-4 text-blue-600 hover:underline dark:text-blue-400">
           Voltar para a lista
         </button>
       </div>
@@ -67,19 +95,13 @@ const Detail: React.FC<DetailProps> = ({ restaurantId, onBack }) => {
 
       {/* Hero Image */}
       <div className="relative mb-8 h-64 w-full overflow-hidden rounded-3xl shadow-xl sm:h-96">
-        <img
-          src={restaurant.image}
-          alt={restaurant.name}
-          className="h-full w-full object-cover"
-        />
+        <img src={restaurant.image} alt={restaurant.name} className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
         <div className="absolute bottom-0 left-0 p-6 sm:p-10">
           <span className="mb-2 inline-block rounded-full bg-blue-600 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-sm">
             {restaurant.cuisine}
           </span>
-          <h1 className="text-3xl font-extrabold text-white sm:text-5xl md:text-6xl">
-            {restaurant.name}
-          </h1>
+          <h1 className="text-3xl font-extrabold text-white sm:text-5xl md:text-6xl">{restaurant.name}</h1>
         </div>
       </div>
 
@@ -100,13 +122,16 @@ const Detail: React.FC<DetailProps> = ({ restaurantId, onBack }) => {
           <h2 className="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Sobre o restaurante</h2>
           <p className="mb-8 text-lg leading-relaxed text-gray-600 dark:text-gray-300">
             {restaurant.description}
-            <br /><br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            <br />
+            <br />
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat.
           </p>
-          
+
           <h2 className="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Localização</h2>
           <div className="overflow-hidden rounded-2xl border border-gray-200 shadow-sm dark:border-gray-700">
-             <MapView restaurants={[restaurant]} />
+            <MapView restaurants={[restaurant]} />
           </div>
         </div>
 
@@ -116,41 +141,41 @@ const Detail: React.FC<DetailProps> = ({ restaurantId, onBack }) => {
             <h3 className="mb-6 text-xl font-bold text-gray-800 dark:text-white">Informações de Contato</h3>
             <div className="flex flex-col space-y-5">
               {restaurant.website && (
-                <a 
-                  href={`https://${restaurant.website}`} 
-                  target="_blank" 
+                <a
+                  href={`https://${restaurant.website}`}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-start gap-3 text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
                 >
                   <div className="rounded-full bg-blue-50 p-2 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:group-hover:bg-blue-900/40">
-                     <GlobeIcon className="h-5 w-5" />
+                    <GlobeIcon className="h-5 w-5" />
                   </div>
                   <span className="break-all pt-1.5 font-medium">{restaurant.website}</span>
                 </a>
               )}
-              
+
               {restaurant.phone && (
-                 <a 
-                  href={`tel:${restaurant.phone.replace(/\s/g, '')}`} 
+                <a
+                  href={`tel:${restaurant.phone.replace(/\s/g, "")}`}
                   className="group flex items-start gap-3 text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                 >
-                   <div className="rounded-full bg-blue-50 p-2 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:group-hover:bg-blue-900/40">
-                     <PhoneIcon className="h-5 w-5" />
-                   </div>
-                   <span className="pt-1.5 font-medium">{restaurant.phone}</span>
-                 </a>
+                >
+                  <div className="rounded-full bg-blue-50 p-2 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:group-hover:bg-blue-900/40">
+                    <PhoneIcon className="h-5 w-5" />
+                  </div>
+                  <span className="pt-1.5 font-medium">{restaurant.phone}</span>
+                </a>
               )}
 
               {restaurant.email && (
-                 <a 
-                  href={`mailto:${restaurant.email}`} 
+                <a
+                  href={`mailto:${restaurant.email}`}
                   className="group flex items-start gap-3 text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                 >
-                   <div className="rounded-full bg-blue-50 p-2 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:group-hover:bg-blue-900/40">
-                     <MailIcon className="h-5 w-5" />
-                   </div>
-                   <span className="pt-1.5 font-medium">{restaurant.email}</span>
-                 </a>
+                >
+                  <div className="rounded-full bg-blue-50 p-2 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:group-hover:bg-blue-900/40">
+                    <MailIcon className="h-5 w-5" />
+                  </div>
+                  <span className="pt-1.5 font-medium">{restaurant.email}</span>
+                </a>
               )}
             </div>
           </div>

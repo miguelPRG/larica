@@ -3,20 +3,16 @@ import { useAuth } from "./hooks/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AppRoutes from "./routes/AppRoutes";
-import { useShallow } from "zustand/react/shallow";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function App() {
   const [minLoadingTime, setMinLoadingTime] = useState(true);
-  const { initialize, isLoading } = useAuth(
-    useShallow((state) => ({
-      initialize: state.initialize,
-      isLoading: state.isLoading,
-    })),
-  );
-  
-  // cria o QueryClient apenas uma vez (moved before any early return so hooks order stays stable)
-  const queryClient = useMemo(() =>
+  const initialize = useAuth((state) => state.initialize);
+  const isLoading = useAuth((state) => state.isLoading);
+
+  // cria o QueryClient apenas uma vez
+  const queryClient = useMemo(
+    () =>
       new QueryClient({
         defaultOptions: {
           queries: {
@@ -46,7 +42,7 @@ export default function App() {
       unsubscribe();
       clearTimeout(timer);
     };
-  }, []);
+  }, [initialize]);
 
   // Espera AMBOS: o tempo mínimo E a validação do Firebase
   if (minLoadingTime || isLoading) {

@@ -7,7 +7,7 @@ import { ToastContainer, Bounce } from "react-toastify";
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 const HomePage = lazy(() => import("../pages/HomePage"));
 const RegisterPage = lazy(() => import("../pages/RegisterPage"));
-
+const EditProfilePage = lazy(() => import("../pages/EditProfilePage"));
 /**
  * Rota privada: exige usuário autenticado
  */
@@ -56,6 +56,14 @@ export default function AppRoutes() {
             <PublicRoute>
               <RegisterPage />
             </PublicRoute>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <PrivateRoute>
+              <EditProfilePage />
+            </PrivateRoute>
           }
         />
         <Route path="/" element={<HomePage />} />

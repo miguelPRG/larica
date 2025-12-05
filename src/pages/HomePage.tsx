@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import Header from '../components/Header';
-import Search from '../components/Search';
-import Detail from '../pages/Detail';
-import Footer from '../components/Footer';
+import React, { useState } from "react";
+import Header from "../components/Header";
+import Search from "../components/Search";
+import Detail from "../pages/Detail";
+import Footer from "../components/Footer";
 
 const HomePage: React.FC = () => {
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<number | null>(null);
 
   const handleRestaurantSelect = (id: number) => {
     setSelectedRestaurantId(id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleBack = () => {
