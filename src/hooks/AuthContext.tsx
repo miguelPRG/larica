@@ -7,6 +7,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   type User,
   onAuthStateChanged,
   type Unsubscribe,
@@ -20,6 +23,8 @@ type AuthState = {
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => Promise<void>;
   initialize: () => Unsubscribe;
+  updateUser: (displayName?: string, photoURL?: string) => Promise<{ success: boolean; message?: string }>;
+  changePassword: (currentPassword: string, newPassword: string, confirmPassword: string) => Promise<{ success: boolean; message?: string }>;
 };
 
 export const useAuth = create<AuthState>()(
@@ -78,6 +83,62 @@ export const useAuth = create<AuthState>()(
           return { success: true };
         } catch (error: any) {
           return { success: false, message: error.message ?? "Erro no registo" };
+        }
+      },
+
+      updateUser: async (displayName) => {
+        try {
+          const currentUser = auth.currentUser;
+          if (!currentUser) {
+            return { success: false, message: "Nenhum utilizador autenticado" };
+          }
+
+          await updateProfile(currentUser, {
+            ...(displayName && { displayName }),
+          });
+
+          await currentUser.reload();
+          const updatedUser = auth.currentUser;
+          set({ user: updatedUser });
+
+          return { success: true };
+        } catch (error: any) {
+          return { success: false, message: error.message ?? "Erro ao atualizar perfil" };
+        }
+      },
+
+      changePassword: async (currentPassword, newPassword, confirmPassword) => {
+        try {
+          const currentUser = auth.currentUser;
+          if (!currentUser || !currentUser.email) {
+            return { success: false, message: "Nenhum utilizador autenticado" };
+          }
+
+          // Validar se as senhas novas coincidem
+          if (newPassword !== confirmPassword) {
+            return { success: false, message: "As senhas novas não coincidem" };
+          }
+
+          // Validar se a nova senha é diferente da atual
+          if (currentPassword === newPassword) {
+            return { success: false, message: "A nova senha deve ser diferente da atual" };
+          }
+
+          // Reautenticar o utilizador com a senha atual
+          const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+          await reauthenticateWithCredential(currentUser, credential);
+
+          // Atualizar a password
+          await updatePassword(currentUser, newPassword);
+
+          return { success: true };
+        } catch (error: any) {
+
+
+          if (error.code === "auth/invalid-credential") {
+            return { success: false, message: "Senha atual incorreta" };
+          }
+          return { success: false, message: error.message ?? "Erro ao alterar a senha" };
         }
       },
     }),

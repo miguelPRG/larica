@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { useAuth } from "../hooks/AuthContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   email: z.email("Email válido é obrigatório"),
@@ -25,6 +26,8 @@ export default function LoginPage() {
   });
   const { login } = useAuth();
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+  const navigate = useNavigate();
+
 
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);
@@ -57,8 +60,9 @@ export default function LoginPage() {
     <div className="mx-auto w-full max-w-md">
       <div className="flex flex-col items-center mt-20">
         <div className="w-60 mb-10">
-          <img src={logo} alt="Logo" />
+          <img src={logo} alt="Logo" className="cursor-pointer" onClick={() => navigate("/")} />
         </div>
+        <h1 className="text-center">Faça Login com a sua conta.</h1>
         <div id="oAuthButtons" className="flex flex-col gap-4"></div>
         <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full px-8">
           <label htmlFor="email">Email</label>
@@ -114,7 +118,7 @@ export default function LoginPage() {
           </div>
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
-          <button type="submit" className="mt-5" disabled={isSubmitting}>
+          <button type="submit" className="mt-5 " disabled={isSubmitting}>
             Entrar
           </button>
         </form>

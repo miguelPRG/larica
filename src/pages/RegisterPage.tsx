@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { useAuth } from "../hooks/AuthContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = z
   .object({
@@ -24,6 +25,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { registerUser } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -66,8 +68,9 @@ export default function RegisterPage() {
     <div className="mx-auto w-full max-w-md">
       <div className="flex flex-col items-center mt-20">
         <div className="w-60 mb-10">
-          <img src={logo} alt="Logo" />
+          <img src={logo} alt="Logo" className="cursor-pointer" onClick={() => navigate("/")} />
         </div>
+        <h1 className="text-center">Registe a sua conta</h1>
         <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full px-8">
           <label htmlFor="name">Nome</label>
           <input id="name" type="text" {...register("name")} />

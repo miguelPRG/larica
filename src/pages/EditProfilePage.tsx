@@ -1,44 +1,51 @@
+import logo from "../assets/logo.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { useAuth } from "../hooks/AuthContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useShallow } from "zustand/shallow";
 
-const editProfileSchema = z
+const editProfileSchema = z.object({
+  name: z.string().min(2, "O nome deve ter pelo menos 2 caracteres"),
+  email: z.string("Email inválido"),
+});
+
+const changePasswordSchema = z
   .object({
-    name: z.string().min(2, "O nome deve ter pelo menos 2 caracteres"),
-    email: z.email("Email válido é obrigatório"),
-    currentPassword: z.string(),
+    currentPassword: z.string().min(1, "Senha atual é obrigatória"),
     newPassword: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-    confirmPassword: z.string("Confirmação de senha é obrigatória"),
+    confirmPassword: z.string().min(1, "Confirme a nova senha"),
   })
-  .refine(
-    (data) => {
-      if (data.newPassword && data.newPassword.length > 0) {
-        return data.newPassword === data.confirmPassword;
-      }
-      return true;
-    },
-    {
-      message: "As senhas não coincidem",
-      path: ["confirmPassword"],
-    },
-  );
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
 
 type EditProfileFormData = z.infer<typeof editProfileSchema>;
+type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 
 export default function EditProfilePage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { user } = useAuth();
+  const [isSubmittingProfile, setIsSubmittingProfile] = useState(false);
+  const [isSubmittingPassword, setIsSubmittingPassword] = useState(false);
+  const { user, updateUser, changePassword } = useAuth(
+    useShallow((state) => ({
+      user: state.user,
+      updateUser: state.updateUser,
+      changePassword: state.changePassword,
+    }))
+  );
+  const navigate = useNavigate();
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
+    register: registerProfile,
+    handleSubmit: handleSubmitProfile,
+    formState: { errors: errorsProfile },
   } = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
@@ -47,26 +54,88 @@ export default function EditProfilePage() {
     },
   });
 
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+    formState: { errors: errorsPassword },
+    reset: resetPassword,
+  } = useForm<ChangePasswordFormData>({
+    resolver: zodResolver(changePasswordSchema),
+  });
+
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-  const onSubmit = async (data: EditProfileFormData) => {
-    setIsSubmitting(true);
+  const onSubmitProfile = async (data: EditProfileFormData) => {
+    setIsSubmittingProfile(true);
     try {
       await toast.promise(
         (async () => {
           await delay(800);
-          // Implementar lógica de atualização do perfil aqui
-          console.log("Dados do perfil:", data);
+
+          if (data.name !== user?.displayName) {
+            const updateResult = await updateUser(data.name);
+            if (!updateResult.success) {
+              throw new Error(updateResult.message || "Erro ao atualizar perfil");
+            }
+          }
+
           return { success: true };
         })(),
         {
           pending: "Atualizando perfil...",
           success: "Perfil atualizado com sucesso!",
-          error: "Erro ao atualizar perfil",
+          error: {
+            render({ data }) {
+              return `Erro: ${(data as Error).message}`;
+            },
+          },
         },
       );
+
+      navigate("/");
+
+    } catch (error) {
+      console.error("Erro na atualização:", error);
     } finally {
-      setIsSubmitting(false);
+      setIsSubmittingProfile(false);
+    }
+  };
+
+  const onSubmitPassword = async (data: ChangePasswordFormData) => {
+    setIsSubmittingPassword(true);
+    try {
+      await toast.promise(
+        (async () => {
+          await delay(800);
+
+          const passwordResult = await changePassword(
+            data.currentPassword,
+            data.newPassword,
+            data.confirmPassword,
+          );
+          if (!passwordResult.success) {
+            throw new Error(passwordResult.message || "Erro ao alterar a senha");
+          }
+
+          return { success: true };
+        })(),
+        {
+          pending: "Alterando senha...",
+          success: "Senha alterada com sucesso!",
+          error: {
+            render({ data }) {
+              return `Erro: ${(data as Error).message}`;
+            },
+          },
+        },
+      );
+
+      resetPassword();
+      navigate("/");
+    } catch (error) {
+      console.error("Erro na alteração de senha:", error);
+    } finally {
+      setIsSubmittingPassword(false);
     }
   };
 
@@ -74,7 +143,7 @@ export default function EditProfilePage() {
     <button
       type="button"
       onClick={onClick}
-      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 bg-transparent p-1"
+      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 bg-transparent p-1 my-0"
     >
       {show ? (
         <svg
@@ -112,72 +181,108 @@ export default function EditProfilePage() {
   );
 
   return (
-    <div className="mx-auto w-full max-w-md">
+    <div className="mx-auto w-full max-w-4xl">
       <div className="flex flex-col items-center mt-20">
-        <h1 className="text-3xl font-bold mb-8">Editar Perfil</h1>
+        <div className="w-60 mb-10">
+          <img src={logo} alt="Logo" className="cursor-pointer" onClick={() => navigate("/")} />
+        </div>
+        <h1 className="text-center mb-10">Editar Perfil</h1>
 
-        <form noValidate onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full px-8">
-          <label htmlFor="name">Nome</label>
-          <input id="name" type="text" {...register("name")} />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" {...register("email")} />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-          <div className="mt-6 pt-6 border-t border-gray-700">
-            <h2 className="text-xl font-semibold mb-4">Alterar Senha</h2>
+        <div className="w-full max-w-lg">
+          {/* Formulário de Perfil */}
+          <form noValidate onSubmit={handleSubmitProfile(onSubmitProfile)}>
+            <h2 className="text-lg font-semibold mb-2">Dados Pessoais</h2>
 
-            <label htmlFor="currentPassword">Senha Atual</label>
-            <div className="relative">
-              <input
-                id="currentPassword"
-                type={showCurrentPassword ? "text" : "password"}
-                {...register("currentPassword")}
-                className="pr-10"
-              />
-              <PasswordToggleButton
-                show={showCurrentPassword}
-                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-              />
+            <div>
+              <label htmlFor="name" className="block mb-2">
+                Nome
+              </label>
+              <input id="name" type="text" {...registerProfile("name")} />
+              {errorsProfile.name && <p className="text-red-500 text-sm mt-1">{errorsProfile.name.message}</p>}
             </div>
-            {errors.currentPassword && <p className="text-red-500 text-sm">{errors.currentPassword.message}</p>}
 
-            <label htmlFor="newPassword" className="mt-4">
-              Nova Senha
-            </label>
-            <div className="relative">
-              <input
-                id="newPassword"
-                type={showNewPassword ? "text" : "password"}
-                {...register("newPassword")}
-                className="pr-10"
-                placeholder="Deixe em branco para não alterar"
-              />
-              <PasswordToggleButton show={showNewPassword} onClick={() => setShowNewPassword(!showNewPassword)} />
+            <div>
+              <label htmlFor="email" className="block mb-2">
+                Email
+              </label>
+              <input id="email" type="email" {...registerProfile("email")} disabled />
+              {errorsProfile.email && <p className="text-red-500 text-sm mt-1">{errorsProfile.email.message}</p>}
             </div>
-            {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword.message}</p>}
 
-            <label htmlFor="confirmPassword" className="mt-4">
-              Confirmar Nova Senha
-            </label>
-            <div className="relative">
-              <input
-                id="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
-                {...register("confirmPassword")}
-                className="pr-10"
-              />
-              <PasswordToggleButton
-                show={showConfirmPassword}
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              />
+            <button type="submit" disabled={isSubmittingProfile} className="mt-4">
+              {isSubmittingProfile ? "Salvando..." : "Salvar Alterações"}
+            </button>
+          </form>
+
+          {/* Formulário de Senha */}
+          <form noValidate onSubmit={handleSubmitPassword(onSubmitPassword)}>
+            <h2 className="text-lg font-semibold mb-2">Alterar Senha</h2>
+
+            <div>
+              <label htmlFor="currentPassword" className="block mb-2">
+                Senha Atual
+              </label>
+              <div className="relative">
+                <input
+                  id="currentPassword"
+                  type={showCurrentPassword ? "text" : "password"}
+                  {...registerPassword("currentPassword")}
+                  className="pr-10 w-full"
+                />
+                <PasswordToggleButton
+                  show={showCurrentPassword}
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                />
+              </div>
+              {errorsPassword.currentPassword && (
+                <p className="text-red-500 text-sm mt-1">{errorsPassword.currentPassword.message}</p>
+              )}
             </div>
-            {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
-          </div>
 
-          <button type="submit" className="mt-5" disabled={isSubmitting}>
-            Salvar Alterações
-          </button>
-        </form>
+            <div>
+              <label htmlFor="newPassword" className="block mb-2">
+                Nova Senha
+              </label>
+              <div className="relative">
+                <input
+                  id="newPassword"
+                  type={showNewPassword ? "text" : "password"}
+                  {...registerPassword("newPassword")}
+                  className="pr-10 w-full"
+                />
+                <PasswordToggleButton show={showNewPassword} onClick={() => setShowNewPassword(!showNewPassword)} />
+              </div>
+              {errorsPassword.newPassword && (
+                <p className="text-red-500 text-sm mt-1">{errorsPassword.newPassword.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block mb-2">
+                Confirmar Nova Senha
+              </label>
+              <div className="relative">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  {...registerPassword("confirmPassword")}
+                  className="pr-10 w-full"
+                />
+                <PasswordToggleButton
+                  show={showConfirmPassword}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                />
+              </div>
+              {errorsPassword.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">{errorsPassword.confirmPassword.message}</p>
+              )}
+            </div>
+
+            <button type="submit" disabled={isSubmittingPassword} className="mt-4">
+              {isSubmittingPassword ? "Alterando..." : "Alterar Senha"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

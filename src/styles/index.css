@@ -11,22 +11,22 @@
   }
 
   h1 {
-    @apply text-5xl font-bold leading-tight mb-8;
+    @apply text-4xl font-bold leading-tight mb-8;
   }
   h2 {
-    @apply text-4xl font-bold leading-tight mb-6;
-  }
-  h3 {
     @apply text-3xl font-bold leading-tight mb-6;
   }
+  h3 {
+    @apply text-2xl font-bold leading-tight mb-6;
+  }
   h4 {
-    @apply text-2xl font-bold leading-tight mb-4;
+    @apply text-xl font-bold leading-tight mb-4;
   }
   h5 {
-    @apply text-xl   font-bold leading-tight mb-4;
+    @apply text-lg   font-bold leading-tight mb-4;
   }
   h6 {
-    @apply text-lg   font-bold leading-tight mb-4;
+    @apply text-base  font-bold leading-tight mb-4;
   }
 
   p {
@@ -39,7 +39,7 @@
 
   /* Botões globais (todos os <button> já saem bonitos) */
   button {
-    @apply px-6 py-3 rounded-lg font-medium text-white bg-primary-main hover:bg-primary-one;
+    @apply px-6 py-3 rounded-lg font-medium text-white bg-primary-main hover:bg-primary-one cursor-pointer;
   }
 
   /* Inputs, textarea, select */
@@ -48,17 +48,14 @@
   select {
     @apply w-full px-4 py-3 rounded-lg bg-dark-one border border-dark-four text-light-main placeholder-dark-three;
   }
-}
 
-/* Opcional: componentes reutilizáveis */
-@layer components {
-  .btn-primary {
-    @apply bg-primary-main hover:bg-primary-one text-white;
+  input:disabled,
+  textarea:disabled,
+  select:disabled {
+    @apply outline-none bg-dark-two border-dark-four cursor-not-allowed;
   }
-  .btn-secondary {
-    @apply bg-secondary-main hover:bg-secondary-one text-white;
-  }
-  .card {
-    @apply bg-dark-one border border-dark-three rounded-xl p-6;
+
+  form {
+    @apply flex flex-col gap-4 bg-dark-one border-2 border-dark-two rounded-lg p-4 mb-5;
   }
 }

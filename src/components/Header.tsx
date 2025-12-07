@@ -131,7 +131,7 @@ const Header = () => {
             <div className="flex items-center gap-4">
               <span>Olá, {name || "Usuário"}!</span>
               <Link
-                to="/profile"
+                to="/edit-profile"
                 className="rounded-lg px-4 py-2 text-sm font-semibold hover:bg-dark-two"
               >
                 Perfil
