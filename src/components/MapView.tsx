@@ -1,75 +1,114 @@
 import React, { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
-import type { Restaurant } from "../data/restaurants";
+import type { Restaurant } from "../data/Restaurant";
 
-// Fix for default marker icons in Leaflet with bundlers
+// Corrige o problema dos ícones padrão do Leaflet quando usado com bundlers
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
+// Configuração do ícone padrão
 let DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
+  iconUrl: icon,          // ícone do marcador
+  shadowUrl: iconShadow,  // sombra do marcador
+  iconSize: [25, 41],     // tamanho do ícone
+  iconAnchor: [12, 41],   // ponto do ícone que corresponde à posição geográfica
+  popupAnchor: [1, -34],  // ponto do popup em relação ao ícone
   tooltipAnchor: [16, -28],
   shadowSize: [41, 41],
 });
 
+// Aplica o ícone padrão em todos os marcadores
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// Props do componente MapView
 interface MapViewProps {
-  restaurants: Restaurant[];
-  onSelectRestaurant?: (id: number) => void;
+  restaurants: Restaurant[];                       // lista de restaurantes para exibir no mapa
+  onSelectRestaurant?: (restaurant: Restaurant) => void; // callback opcional quando usuário clica em "Ver Detalhes"
 }
 
-// Component to handle map bounds updates
+// Componente auxiliar para atualizar os limites do mapa conforme restaurantes
 const MapUpdater: React.FC<{ restaurants: Restaurant[] }> = ({ restaurants }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (restaurants.length === 0) return;
+    if (restaurants.length === 0) return; // se não houver restaurantes, não faz nada
 
-    const bounds = L.latLngBounds(restaurants.map((r) => [r.latitude, r.longitude]));
+    // Cria bounds com todos os restaurantes
+    const bounds = L.latLngBounds(
+      restaurants.map((r) => [r.geometry.location.lat, r.geometry.location.lng])
+    );
 
-    // If it's a single point, set view with zoom
     if (restaurants.length === 1) {
-      map.setView([restaurants[0].latitude, restaurants[0].longitude], 16);
+      // Se houver apenas um restaurante, centraliza com zoom 16
+      map.setView([restaurants[0].geometry.location.lat, restaurants[0].geometry.location.lng], 16);
     } else {
+      // Se houver mais de um, ajusta os limites do mapa para caber todos
       map.fitBounds(bounds, { padding: [50, 50] });
     }
   }, [restaurants, map]);
 
-  return null;
+  return null; // este componente não renderiza nada, apenas atualiza o mapa
 };
 
+// Componente principal do mapa
 const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) => {
-  // Default center (Aveiro) if no restaurants
+  // Ponto inicial padrão (Aveiro) caso não haja restaurantes
   const defaultPosition: [number, number] = [40.6405, -8.6538];
+
+  // Função que gera a URL da foto do restaurante (Google Places)
+  const getPhotoUrl = (restaurant: Restaurant) => {
+    if (!restaurant.photos?.length) return undefined; // se não houver fotos, retorna undefined
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${restaurant.photos[0].photo_reference}&key=YOUR_GOOGLE_MAPS_API_KEY`;
+  };
 
   return (
     <div className="h-[500px] w-full overflow-hidden rounded-xl border border-gray-200 shadow-inner dark:border-gray-700 relative z-0">
-      <MapContainer center={defaultPosition} zoom={13} style={{ height: "100%", width: "100%" }} className="z-0">
+      <MapContainer
+        center={defaultPosition}   // posição inicial do mapa
+        zoom={13}                  // zoom inicial
+        style={{ height: "100%", width: "100%" }}
+        className="z-0"
+      >
+        {/* TileLayer do OpenStreetMap */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+        {/* Atualiza os limites do mapa com base nos restaurantes */}
         <MapUpdater restaurants={restaurants} />
 
+        {/* Renderiza marcadores para cada restaurante */}
         {restaurants.map((restaurant) => (
-          <Marker key={restaurant.id} position={[restaurant.latitude, restaurant.longitude]}>
+          <Marker
+            key={restaurant.place_id} // use place_id como key única
+            position={[restaurant.geometry.location.lat, restaurant.geometry.location.lng]}
+          >
             <Popup>
               <div className="text-center min-w-[160px]">
-                <img src={restaurant.image} className="w-full h-24 object-cover rounded mb-2" alt={restaurant.name} />
+                {/* Exibe a foto do restaurante, se houver */}
+                {restaurant.photos?.[0] && (
+                  <img
+                    src={getPhotoUrl(restaurant)}
+                    className="w-full h-24 object-cover rounded mb-2"
+                    alt={restaurant.name}
+                  />
+                )}
+
+                {/* Nome do restaurante */}
                 <h3 className="font-bold text-gray-800 text-sm">{restaurant.name}</h3>
-                <p className="text-xs text-gray-600 mb-1">{restaurant.cuisine}</p>
+
+                {/* Tipos/categorias do restaurante */}
+                <p className="text-xs text-gray-600 mb-1">{restaurant.types.join(", ")}</p>
+
+                {/* Avaliação */}
                 <div className="text-yellow-500 text-xs font-bold mb-2">★ {restaurant.rating}</div>
 
+                {/* Botão opcional para detalhes */}
                 {onSelectRestaurant && (
                   <button
-                    onClick={() => onSelectRestaurant(restaurant.id)}
+                    onClick={() => onSelectRestaurant(restaurant)}
                     className="w-full rounded bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none"
                   >
                     Ver Detalhes

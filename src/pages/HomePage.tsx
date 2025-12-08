@@ -3,28 +3,35 @@ import Header from "../components/Header";
 import Search from "../components/Search";
 import Detail from "../pages/Detail";
 import Footer from "../components/Footer";
+import type { Restaurant } from "../data/Restaurant";
 
-const HomePage: React.FC = () => {
-  const [selectedRestaurantId, setSelectedRestaurantId] = useState<number | null>(null);
+interface HomePageProps {
+  userLocation: { lat: number; log: number };
+}
 
-  const handleRestaurantSelect = (id: number) => {
-    setSelectedRestaurantId(id);
+const HomePage: React.FC<HomePageProps> = ({ userLocation }) => {
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+
+  const handleRestaurantSelect = (restaurant: Restaurant) => {
+    setSelectedRestaurant(restaurant);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleBack = () => {
-    setSelectedRestaurantId(null);
-  };
+  const handleBack = () => setSelectedRestaurant(null);
 
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex flex-1 p-4">
-        {selectedRestaurantId ? (
-          <Detail restaurantId={selectedRestaurantId} onBack={handleBack} />
+        {selectedRestaurant ? (
+          <Detail restaurant={selectedRestaurant} onBack={handleBack} />
         ) : (
           <div className="flex flex-1 items-center justify-center">
-            <Search onSelectRestaurant={handleRestaurantSelect} />
+            <Search
+              lat={userLocation.lat}
+              log={userLocation.log}
+              onSelectRestaurant={handleRestaurantSelect} // agora compatível
+            />
           </div>
         )}
       </main>
