@@ -31,11 +31,6 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
 const RestaurantItem: React.FC<RestaurantItemProps> = ({ restaurant, onClick }) => {
   const navigate = useNavigate();
 
-  // Monta a URL da imagem
-  const imageUrl = restaurant.photos?.[0]
-    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${restaurant.photos[0].photo_reference}&key=YOUR_API_KEY`
-    : restaurant.icon;
-
   // Ao clicar no card
   const handleClick = () => {
     if (onClick) {
@@ -53,14 +48,14 @@ const RestaurantItem: React.FC<RestaurantItemProps> = ({ restaurant, onClick }) 
       {/* Imagem do restaurante */}
       <div className="relative h-40 overflow-hidden">
         <img
-          src={imageUrl}
+          src={`https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}`}
           alt={restaurant.name}
           className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
           loading="lazy"
         />
-        <div className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-1 text-xs font-bold text-gray-800 backdrop-blur-sm dark:bg-black/80 dark:text-white">
+        {/*<div className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-1 text-xs font-bold text-gray-800 backdrop-blur-sm dark:bg-black/80 dark:text-white">
           {restaurant.types.join(", ")}
-        </div>
+        </div>*/}
       </div>
 
       {/* Conteúdo textual */}

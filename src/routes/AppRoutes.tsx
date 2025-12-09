@@ -2,6 +2,7 @@ import { lazy, type ReactElement, useEffect, useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/AuthContext";
 import { ToastContainer, Bounce } from "react-toastify";
+import { SpinLoading } from "../components/SpinLoading";
 
 // Lazy loading das páginas — carrega apenas quando necessário
 const LoginPage = lazy(() => import("../pages/LoginPage"));
@@ -47,32 +48,54 @@ export default function AppRoutes() {
    */
   useEffect(() => {
     const getUserLocation = async () => {
+      // Verifica se a API de geolocalização está disponível
+      if (!navigator.geolocation) {
+        console.error("Geolocalização não é suportada pelo navegador");
+        setUserLocation({ lat: 48.8566, log: 2.3522 });
+        setLoadingLocation(false);
+        return;
+      }
+
       try {
-        // Promise para capturar geolocalização
-        const position = await new Promise<GeolocationPosition>((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true })
-        );
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            resolve,
+            reject,
+            {
+              enableHighAccuracy: true,
+              timeout: 10000, // timeout de 10 segundos
+              maximumAge: 0 // não usa cache
+            }
+          );
+        });
+
         const { latitude, longitude } = position.coords;
-
-        // Atualiza o estado com a localização real
+        console.log("Localização obtida:", latitude, longitude);
         setUserLocation({ lat: latitude, log: longitude });
-      } catch (error) {
-        console.error("Não foi possível obter a localização do usuário:", error);
-
-        // Fallback caso o usuário negue permissão ou ocorra erro
-        setUserLocation({ lat: 48.8566, log: 2.3522 }); // Paris
+      } catch (error: any) {
+        console.error("Erro ao obter localização:", error.message);
+        
+        // Mensagens de erro mais específicas
+        if (error.code === 1) {
+          console.warn("Permissão negada pelo usuário");
+        } else if (error.code === 2) {
+          console.warn("Posição indisponível");
+        } else if (error.code === 3) {
+          console.warn("Timeout ao obter localização");
+        }
+        
+        setUserLocation({ lat: 48.8566, log: 2.3522 });
       } finally {
-        // Marca que terminou de carregar a localização
         setLoadingLocation(false);
       }
     };
 
-    getUserLocation(); // chama a função de captura
+    getUserLocation();
   }, []);
 
   // Mostra loading até obter a localização
   if (loadingLocation || !userLocation) {
-    return <div>Carregando localização...</div>;
+    return <SpinLoading />;
   }
 
   return (

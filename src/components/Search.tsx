@@ -37,7 +37,6 @@ const Search: React.FC<SearchProps> = ({ lat, log, page, onSelectRestaurant }) =
       }
 
       const data = await response.json();
-      console.log("Dados recebidos da API:", data);
       return Array.isArray(data) ? data : data.results || data.restaurants || [];
     },
   });
@@ -71,7 +70,20 @@ const Search: React.FC<SearchProps> = ({ lat, log, page, onSelectRestaurant }) =
   return (
     <div className="w-full max-w-7xl mx-auto transition-all duration-500">
       <Card title="Encontre o seu restaurante" subtitle="Explore as 10 melhores opções gastronômicas!">
-        {isLoading && <p>Carregando restaurantes...</p>}
+        {isLoading && (
+          <div className="flex justify-center items-center py-12">
+            <div
+              className="
+                w-16 h-16 
+                border-4 
+                border-light-three 
+                border-t-primary-main 
+                rounded-full 
+                animate-spin
+              "
+            ></div>
+          </div>
+        )}
         {isError && <p>Erro ao carregar dados da API.</p>}
 
         {!isLoading && !isError && (

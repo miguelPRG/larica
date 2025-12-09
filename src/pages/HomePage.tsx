@@ -10,28 +10,7 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ userLocation }) => {
-  const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
-
-  // Obter localização atual do usuário
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCoords({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude,
-        });
-      },
-      (error) => {
-        console.error("Erro ao obter localização:", error);
-        // Usar localização padrão ou do userLocation prop
-        setCoords({
-          lat: userLocation.lat,
-          lon: userLocation.log,
-        });
-      }
-    );
-  }, [userLocation]);
 
   const handleRestaurantSelect = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -48,14 +27,11 @@ const HomePage: React.FC<HomePageProps> = ({ userLocation }) => {
           <Detail restaurant={selectedRestaurant} onBack={handleBack} />
         ) : (
           <div className="flex flex-1 items-center justify-center">
-            {coords && (
               <Search
-                lat={coords.lat}
-                log={coords.lon}
+                lat={userLocation.lat}
+                log={userLocation.log}
                 onSelectRestaurant={handleRestaurantSelect}
               />
-            )}
-            {!coords && <p>Carregando localização...</p>}
           </div>
         )}
       </main>
