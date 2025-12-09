@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AppRoutes from "./routes/AppRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SpinLoading } from "./components/SpinLoading";
 
 export default function App() {
   const [minLoadingTime, setMinLoadingTime] = useState(true);
@@ -55,20 +56,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Suspense
-          fallback={
-            <div className="flex justify-center items-center h-screen bg-dark-main">
-              <div
-                className="
-                w-20 h-20 
-                border-4 
-                border-light-three 
-                border-t-primary-main 
-                rounded-full 
-                animate-spin
-              "
-              ></div>
-            </div>
-          }
+          fallback={<SpinLoading/>}
         >
           <AppRoutes />
         </Suspense>

@@ -11,5 +11,13 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
+    proxy: {
+      // Redireciona requisições para "/api" para o backend
+      "/api": {
+        target: "https://larica-backend.onrender.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""), // remove "/api" do início
+      },
+    },
   },
 });
