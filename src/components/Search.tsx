@@ -69,7 +69,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, page, onSelectRestaurant }) =
 
   return (
     <div className="w-full max-w-7xl mx-auto transition-all duration-500">
-      <Card title="Encontre o seu restaurante" subtitle="Explore as 10 melhores opções gastronômicas!">
+      <Card title={`Encontre o seu restaurante em `} subtitle="Explore as 10 melhores opções gastronômicas!">
         {isLoading && (
           <div className="flex justify-center items-center py-12">
             <div

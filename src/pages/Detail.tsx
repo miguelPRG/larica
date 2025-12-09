@@ -25,16 +25,12 @@ const Detail: React.FC<DetailProps> = ({ restaurant, onBack }) => {
     );
   }
 
-  const imageUrl = restaurant.photos?.[0]
-    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${restaurant.photos[0].photo_reference}&key=YOUR_API_KEY`
-    : restaurant.icon;
-
   return (
     <div className="mx-auto max-w-5xl p-4 pb-20">
       {/* Botão Voltar */}
       <button
         onClick={onBack}
-        className="mb-6 flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+        className="mb-6 flex items-center gap-2 text-sm font-medium"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +47,7 @@ const Detail: React.FC<DetailProps> = ({ restaurant, onBack }) => {
 
       {/* Hero Image */}
       <div className="relative mb-8 h-64 w-full overflow-hidden rounded-3xl shadow-xl sm:h-96">
-        <img src={imageUrl} alt={restaurant.name} className="h-full w-full object-cover" />
+        <img src={`https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}`} alt={restaurant.name} className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
         <div className="absolute bottom-0 left-0 p-6 sm:p-10">
           <span className="mb-2 inline-block rounded-full bg-blue-600 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-sm">
