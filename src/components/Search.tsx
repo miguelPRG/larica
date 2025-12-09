@@ -1,165 +1,144 @@
 import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Card from "./Card";
 import RestaurantItem from "./RestaurantItem";
 import TagsFilter from "./TagsFilter";
 import ViewToggle from "./ViewToggle";
 import MapView from "./MapView";
-import { restaurants } from "../data/restaurants";
+import type { Restaurant } from "../data/Restaurant";
 
-const SearchIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-  </svg>
-);
+interface SearchProps {
+  lat: number;
+  log: number;
+  page?: number;
+  onSelectRestaurant: (restaurant: Restaurant) => void;
+}
 
-type SearchProps = {
-  restaurantes: Array<{
-    id: number;
-    nome: string;
-    // adicione outros campos conforme o retorno da API
-  }>;
-  onSelectRestaurant: (id: number) => void;
-};
-
-function Search({ restaurantes, onSelectRestaurant }: SearchProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCuisine, setSelectedCuisine] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState(4);
+const Search: React.FC<SearchProps> = ({ lat, log, page, onSelectRestaurant }) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState<number>(4);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  
+  const { data: restaurants = [], isLoading, isError } = useQuery<Restaurant[]>({
+    queryKey: ["restaurants", lat, log, page],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://larica-backend.onrender.com/restaurantes?lat=${lat}&lon=${log}${page? `&page=${page}` : ""}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const uniqueCuisines = useMemo(() => {
-    const cuisines = restaurants.map((r) => r.cuisine);
-    return Array.from(new Set(cuisines)).sort();
-  }, []);
+      if (!response.ok) {
+        throw new Error("Erro ao buscar restaurantes");
+      }
+
+      const data = await response.json();
+      return Array.isArray(data) ? data : data.results || data.restaurants || [];
+    },
+  });
+
+  const uniqueTypes = useMemo(() => {
+    const types = restaurants.flatMap((r) => r.types);
+    return Array.from(new Set(types)).sort();
+  }, [restaurants]);
 
   const filteredRestaurants = useMemo(() => {
     let filtered = restaurants;
 
-    if (selectedCuisine) {
-      filtered = filtered.filter((r) => r.cuisine === selectedCuisine);
-    }
+    if (selectedType) filtered = filtered.filter((r) => r.types.includes(selectedType));
 
-    const lowerTerm = searchTerm.toLowerCase().trim();
-    if (lowerTerm) {
-      filtered = filtered.filter(
-        (r) =>
-          r.name.toLowerCase().includes(lowerTerm) ||
-          r.description.toLowerCase().includes(lowerTerm) ||
-          r.cuisine.toLowerCase().includes(lowerTerm),
-      );
-    }
+    const term = searchTerm.toLowerCase().trim();
+    if (term) filtered = filtered.filter((r) => r.name.toLowerCase().includes(term));
 
-    return filtered.sort((a, b) => b.rating - a.rating).slice(0, 10);
-  }, [searchTerm, selectedCuisine]);
+    return filtered.sort((a, b) => b.rating - a.rating).slice(0, 50);
+  }, [restaurants, searchTerm, selectedType]);
 
-  const displayedRestaurants = viewMode === "list" ? filteredRestaurants.slice(0, visibleCount) : filteredRestaurants;
+  const displayedRestaurants =
+    viewMode === "list" ? filteredRestaurants.slice(0, visibleCount) : filteredRestaurants;
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 4);
-  };
+  const handleLoadMore = () => setVisibleCount((prev) => prev + 4);
 
-  const handleCuisineClick = (cuisine: string | null) => {
-    if (selectedCuisine === cuisine) {
-      setSelectedCuisine(null);
-    } else {
-      setSelectedCuisine(cuisine);
-    }
+  const handleTypeClick = (type: string | null) => {
+    setSelectedType((prev) => (prev === type ? null : type));
     setVisibleCount(4);
   };
 
   return (
     <div className="w-full max-w-7xl mx-auto transition-all duration-500">
-      <Card
-        title="Encontre o seu restaurante"
-        subtitle="Explore as 10 melhores opções gastronômicas, veja avaliações e escolha onde comer!"
-      >
-        {/* Search Bar */}
-        <div className="relative mb-6 max-w-2xl mx-auto">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setVisibleCount(4);
-            }}
-            placeholder="Busque por nome, culinária ou descrição..."
-            className="w-full rounded-full px-4 py-3 bg-dark-one border border-dark-four text-light-main placeholder-dark-three"
-          />
-          <div className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-primary-main p-2 text-white">
-            <SearchIcon className="h-6 w-6" />
-          </div>
-        </div>
-
-        {/* Cuisine Tags Component */}
-        <TagsFilter cuisines={uniqueCuisines} selectedCuisine={selectedCuisine} onCuisineSelect={handleCuisineClick} />
-
-        {/* View Toggle */}
-        <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-
-        {/* Content */}
-        {displayedRestaurants.length > 0 ? (
-          viewMode === "list" ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {displayedRestaurants.map((restaurant) => (
-                <RestaurantItem
-                  key={restaurant.id}
-                  restaurant={restaurant}
-                  onSelect={() => onSelectRestaurant(restaurant.id)}
-                />
-              ))}
-            </div>
-          ) : (
-            <MapView restaurants={displayedRestaurants} onSelectRestaurant={onSelectRestaurant} />
-          )
-        ) : (
-          <div className="py-12 text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-dark-two">
-              <SearchIcon className="h-8 w-8 text-dark-three" />
-            </div>
-            <h3 className="text-lg font-medium text-light-main">Nenhum restaurante encontrado</h3>
-            <p className="text-dark-three">Tente ajustar sua busca ou filtros para encontrar o que procura.</p>
-            <button
-              onClick={() => {
-                setSearchTerm("");
-                setSelectedCuisine(null);
-              }}
-              className="btn-secondary mt-4"
-            >
-              Limpar todos os filtros
-            </button>
+      <Card title="Encontre o seu restaurante" subtitle="Explore as 10 melhores opções gastronômicas!">
+        {isLoading && (
+          <div className="flex justify-center items-center py-12">
+            <div
+              className="
+                w-16 h-16 
+                border-4 
+                border-light-three 
+                border-t-primary-main 
+                rounded-full 
+                animate-spin
+              "
+            ></div>
           </div>
         )}
+        {isError && <p>Erro ao carregar dados da API.</p>}
 
-        {/* Load More Button - Only for List View */}
-        {viewMode === "list" && visibleCount < filteredRestaurants.length && (
-          <div className="mt-10 flex justify-center">
-            <button onClick={handleLoadMore} className="btn-primary">
-              <span className="flex items-center gap-2">
-                Mais registros
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </span>
-            </button>
-          </div>
+        {!isLoading && !isError && (
+          <>
+            <div className="relative mb-6 max-w-2xl mx-auto">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setVisibleCount(4);
+                }}
+                placeholder="Busque por nome ou tipo..."
+                className="w-full rounded-full px-4 py-3 bg-dark-one border border-dark-four text-light-main"
+              />
+            </div>
+
+            <TagsFilter
+              cuisines={uniqueTypes}
+              selectedCuisine={selectedType}
+              onCuisineSelect={handleTypeClick}
+            />
+
+            <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+
+            {displayedRestaurants.length > 0 ? (
+              viewMode === "list" ? (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {displayedRestaurants.map((r) => (
+                    <RestaurantItem
+                      key={r.place_id}
+                      restaurant={r}
+                      onClick={() => onSelectRestaurant(r)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <MapView restaurants={displayedRestaurants} />
+              )
+            ) : (
+              <p className="text-center py-6">Nenhum restaurante encontrado.</p>
+            )}
+
+            {viewMode === "list" && visibleCount < filteredRestaurants.length && (
+              <div className="mt-10 flex justify-center">
+                <button onClick={handleLoadMore} className="btn-primary">
+                  Mais registros
+                </button>
+              </div>
+            )}
+          </>
         )}
       </Card>
     </div>
   );
-}
+};
 
 export default Search;
