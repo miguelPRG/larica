@@ -1,26 +1,46 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Card from "./Card";
 import RestaurantItem from "./RestaurantItem";
 import TagsFilter from "./TagsFilter";
 import ViewToggle from "./ViewToggle";
 import MapView from "./MapView";
-import { useRestaurants } from "../hooks/useRestaurants";
 import type { Restaurant } from "../data/Restaurant";
 
-// Props do componente: recebe latitude, longitude e callback para restaurante completo
 interface SearchProps {
   lat: number;
   log: number;
-  onSelectRestaurant: (restaurant: Restaurant) => void; // envia objeto completo
+  page?: number;
+  onSelectRestaurant: (restaurant: Restaurant) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
+const Search: React.FC<SearchProps> = ({ lat, log, page, onSelectRestaurant }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState<number>(4);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  
+  const { data: restaurants = [], isLoading, isError } = useQuery<Restaurant[]>({
+    queryKey: ["restaurants", lat, log, page],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://larica-backend.onrender.com/restaurantes?lat=${lat}&lon=${log}${page? `&page=${page}` : ""}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const { data: restaurants = [], isLoading, isError } = useRestaurants(lat, log);
+      if (!response.ok) {
+        throw new Error("Erro ao buscar restaurantes");
+      }
+
+      const data = await response.json();
+      console.log("Dados recebidos da API:", data);
+      return Array.isArray(data) ? data : data.results || data.restaurants || [];
+    },
+  });
 
   const uniqueTypes = useMemo(() => {
     const types = restaurants.flatMap((r) => r.types);
@@ -56,7 +76,6 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
 
         {!isLoading && !isError && (
           <>
-            {/* Barra de busca */}
             <div className="relative mb-6 max-w-2xl mx-auto">
               <input
                 type="text"
@@ -70,17 +89,14 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
               />
             </div>
 
-            {/* Filtro de tipos */}
             <TagsFilter
               cuisines={uniqueTypes}
               selectedCuisine={selectedType}
               onCuisineSelect={handleTypeClick}
             />
 
-            {/* Alternância Lista ↔ Mapa */}
             <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
-            {/* Lista ou mapa */}
             {displayedRestaurants.length > 0 ? (
               viewMode === "list" ? (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -88,7 +104,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
                     <RestaurantItem
                       key={r.place_id}
                       restaurant={r}
-                      onClick={() => onSelectRestaurant(r)} // envia objeto completo
+                      onClick={() => onSelectRestaurant(r)}
                     />
                   ))}
                 </div>
