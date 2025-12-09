@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import type { Restaurant } from "../data/Restaurant";
@@ -53,6 +53,7 @@ const MapUpdater: React.FC<{ restaurants: Restaurant[] }> = ({ restaurants }) =>
 
 // Componente principal do mapa
 const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) => {
+  
   // Ponto inicial padrão (Aveiro) caso não haja restaurantes
   const defaultPosition: [number, number] = [40.6405, -8.6538];
 
@@ -121,6 +122,6 @@ const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) =>
       </MapContainer>
     </div>
   );
-};
+}
 
 export default MapView;

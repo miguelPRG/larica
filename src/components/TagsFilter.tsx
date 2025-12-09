@@ -1,4 +1,3 @@
-import React from "react";
 
 interface CuisineFilterProps {
   cuisines: string[];
@@ -6,7 +5,7 @@ interface CuisineFilterProps {
   onCuisineSelect: (cuisine: string | null) => void;
 }
 
-const CuisineFilter: React.FC<CuisineFilterProps> = ({ cuisines, selectedCuisine, onCuisineSelect }) => {
+function CuisineFilter({ cuisines, selectedCuisine, onCuisineSelect }: CuisineFilterProps) {
   return (
     <div className="mb-8 flex flex-wrap justify-center gap-2">
       <button
@@ -34,6 +33,6 @@ const CuisineFilter: React.FC<CuisineFilterProps> = ({ cuisines, selectedCuisine
       ))}
     </div>
   );
-};
+}
 
 export default CuisineFilter;

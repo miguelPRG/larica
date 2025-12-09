@@ -1,12 +1,12 @@
-import React from "react";
+import type { ReactNode } from "react";
 
 interface CardProps {
   title: string;
   subtitle?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const Card: React.FC<CardProps> = ({ title, subtitle, children }) => {
+function Card({ title, subtitle, children }: CardProps) {
   return (
     <div className="card">
       <h1 className="mb-2 text-center text-2xl font-bold">{title}</h1>
@@ -14,6 +14,6 @@ const Card: React.FC<CardProps> = ({ title, subtitle, children }) => {
       <div className="mt-4">{children}</div>
     </div>
   );
-};
+}
 
 export default Card;
