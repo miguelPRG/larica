@@ -48,42 +48,24 @@ export default function AppRoutes() {
    */
   useEffect(() => {
     const getUserLocation = async () => {
-      // Verifica se a API de geolocalização está disponível
-      if (!navigator.geolocation) {
-        console.error("Geolocalização não é suportada pelo navegador");
-        setUserLocation({ lat: 48.8566, log: 2.3522 });
-        setLoadingLocation(false);
-        return;
-      }
-
       try {
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(
-            resolve,
-            reject,
-            {
-              enableHighAccuracy: true,
-              timeout: 10000, // timeout de 10 segundos
-              maximumAge: 0 // não usa cache
-            }
-          );
-        });
-
-        const { latitude, longitude } = position.coords;
-        console.log("Localização obtida:", latitude, longitude);
-        setUserLocation({ lat: latitude, log: longitude });
-      } catch (error: any) {
-        console.error("Erro ao obter localização:", error.message);
-        
-        // Mensagens de erro mais específicas
-        if (error.code === 1) {
-          console.warn("Permissão negada pelo usuário");
-        } else if (error.code === 2) {
-          console.warn("Posição indisponível");
-        } else if (error.code === 3) {
-          console.warn("Timeout ao obter localização");
+        const res = await fetch("https://ipapi.co/json");
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
         }
-        
+        const data = await res.json();
+
+        const latitude = Number(data.latitude);
+        const longitude = Number(data.longitude);
+
+        if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+          setUserLocation({ lat: latitude, log: longitude });
+        } else {
+          console.warn("Coordenadas inválidas recebidas do ipapi");
+          setUserLocation({ lat: 48.8566, log: 2.3522 });
+        }
+      } catch (error: any) {
+        console.error("Erro ao obter localização via ipapi:", error?.message ?? error);
         setUserLocation({ lat: 48.8566, log: 2.3522 });
       } finally {
         setLoadingLocation(false);
