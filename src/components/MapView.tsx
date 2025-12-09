@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import type { Restaurant } from "../data/restaurants";
 
-// Fix for default marker icons in Leaflet with bundlers
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
@@ -24,8 +23,7 @@ interface MapViewProps {
   onSelectRestaurant?: (id: number) => void;
 }
 
-// Component to handle map bounds updates
-const MapUpdater: React.FC<{ restaurants: Restaurant[] }> = ({ restaurants }) => {
+function MapUpdater({ restaurants }: { restaurants: Restaurant[] }) {
   const map = useMap();
 
   useEffect(() => {
@@ -33,7 +31,6 @@ const MapUpdater: React.FC<{ restaurants: Restaurant[] }> = ({ restaurants }) =>
 
     const bounds = L.latLngBounds(restaurants.map((r) => [r.latitude, r.longitude]));
 
-    // If it's a single point, set view with zoom
     if (restaurants.length === 1) {
       map.setView([restaurants[0].latitude, restaurants[0].longitude], 16);
     } else {
@@ -42,10 +39,9 @@ const MapUpdater: React.FC<{ restaurants: Restaurant[] }> = ({ restaurants }) =>
   }, [restaurants, map]);
 
   return null;
-};
+}
 
-const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) => {
-  // Default center (Aveiro) if no restaurants
+function MapView({ restaurants, onSelectRestaurant }: MapViewProps) {
   const defaultPosition: [number, number] = [40.6405, -8.6538];
 
   return (
@@ -82,6 +78,6 @@ const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) =>
       </MapContainer>
     </div>
   );
-};
+}
 
 export default MapView;

@@ -1,4 +1,3 @@
-import React from "react";
 import type { Restaurant } from "../data/restaurants";
 
 interface RestaurantItemProps {
@@ -6,7 +5,7 @@ interface RestaurantItemProps {
   onSelect: () => void;
 }
 
-const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+const StarRating = ({ rating }: { rating: number }) => {
   return (
     <div className="flex items-center">
       {[1, 2, 3, 4, 5].map((star) => (
@@ -25,7 +24,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
   );
 };
 
-const RestaurantItem: React.FC<RestaurantItemProps> = ({ restaurant, onSelect }) => {
+function RestaurantItem({ restaurant, onSelect }: RestaurantItemProps) {
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
       <div className="relative h-40 overflow-hidden">
@@ -59,6 +58,6 @@ const RestaurantItem: React.FC<RestaurantItemProps> = ({ restaurant, onSelect })
       </div>
     </div>
   );
-};
+}
 
 export default RestaurantItem;

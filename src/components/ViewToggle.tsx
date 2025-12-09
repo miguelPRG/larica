@@ -1,11 +1,10 @@
-import React from "react";
 
 interface ViewToggleProps {
   viewMode: "list" | "map";
   setViewMode: (mode: "list" | "map") => void;
 }
 
-const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, setViewMode }) => {
+function ViewToggle({ viewMode, setViewMode }: ViewToggleProps) {
   return (
     <div className="mb-6 flex left">
       <div className="inline-flex rounded-lg bg-gray-100 p-1 shadow-sm dark:bg-gray-700">
@@ -56,6 +55,6 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ viewMode, setViewMode }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ViewToggle;

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Card from "./Card";
 import RestaurantItem from "./RestaurantItem";
 import TagsFilter from "./TagsFilter";
@@ -6,7 +6,7 @@ import ViewToggle from "./ViewToggle";
 import MapView from "./MapView";
 import { restaurants } from "../data/restaurants";
 
-const SearchIcon: React.FC<{ className?: string }> = ({ className }) => (
+const SearchIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}
     xmlns="http://www.w3.org/2000/svg"
@@ -19,33 +19,33 @@ const SearchIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-interface SearchProps {
+type SearchProps = {
+  restaurantes: Array<{
+    id: number;
+    nome: string;
+    // adicione outros campos conforme o retorno da API
+  }>;
   onSelectRestaurant: (id: number) => void;
-}
+};
 
-const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+function Search({ restaurantes, onSelectRestaurant }: SearchProps) {
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCuisine, setSelectedCuisine] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState<number>(4);
+  const [visibleCount, setVisibleCount] = useState(4);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
-  // Extract unique cuisines for tags
   const uniqueCuisines = useMemo(() => {
     const cuisines = restaurants.map((r) => r.cuisine);
     return Array.from(new Set(cuisines)).sort();
   }, []);
 
-  // Filter restaurants based on search term and selected cuisine
-  // And limit to Top 10 by Rating
   const filteredRestaurants = useMemo(() => {
     let filtered = restaurants;
 
-    // Filter by Cuisine Tag
     if (selectedCuisine) {
       filtered = filtered.filter((r) => r.cuisine === selectedCuisine);
     }
 
-    // Filter by Search Term
     const lowerTerm = searchTerm.toLowerCase().trim();
     if (lowerTerm) {
       filtered = filtered.filter(
@@ -56,12 +56,9 @@ const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
       );
     }
 
-    // Sort by Rating (Descending) and take Top 10
     return filtered.sort((a, b) => b.rating - a.rating).slice(0, 10);
   }, [searchTerm, selectedCuisine]);
 
-  // Pagination: get current slice for LIST view only
-  // For Map view, we usually want to show all filtered results
   const displayedRestaurants = viewMode === "list" ? filteredRestaurants.slice(0, visibleCount) : filteredRestaurants;
 
   const handleLoadMore = () => {
@@ -70,11 +67,11 @@ const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
 
   const handleCuisineClick = (cuisine: string | null) => {
     if (selectedCuisine === cuisine) {
-      setSelectedCuisine(null); // Toggle off if clicking the same active tag
+      setSelectedCuisine(null);
     } else {
       setSelectedCuisine(cuisine);
     }
-    setVisibleCount(4); // Reset pagination to initial view
+    setVisibleCount(4);
   };
 
   return (
@@ -163,6 +160,6 @@ const Search: React.FC<SearchProps> = ({ onSelectRestaurant }) => {
       </Card>
     </div>
   );
-};
+}
 
 export default Search;
