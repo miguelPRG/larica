@@ -11,12 +11,15 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
-    proxy: {
-      // Redireciona requisições para "/api" para o backend
-      "/api": {
-        target: "https://larica-backend.onrender.com",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""), // remove "/api" do início
+  },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          forms: ["zod", "@hookform/resolvers"],
+        },
       },
     },
   },

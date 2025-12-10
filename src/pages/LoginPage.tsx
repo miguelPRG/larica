@@ -45,7 +45,7 @@ export default function LoginPage() {
           pending: "Carregando ...",
           success: "Login realizado com sucesso!",
           error: {
-            render({ data }) {
+            render() {
               return "Email ou password inválidos.";
             },
           },

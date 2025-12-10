@@ -57,12 +57,6 @@ const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) =>
   // Ponto inicial padrão (Aveiro) caso não haja restaurantes
   const defaultPosition: [number, number] = [40.6405, -8.6538];
 
-  // Função que gera a URL da foto do restaurante (Google Places)
-  const getPhotoUrl = (restaurant: Restaurant) => {
-    if (!restaurant.photos?.length) return undefined; // se não houver fotos, retorna undefined
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${restaurant.photos[0].photo_reference}&key=YOUR_GOOGLE_MAPS_API_KEY`;
-  };
-
   return (
     <div className="h-[500px] w-full overflow-hidden rounded-xl border border-gray-200 shadow-inner dark:border-gray-700 relative z-0">
       <MapContainer

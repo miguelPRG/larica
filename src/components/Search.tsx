@@ -6,7 +6,7 @@ import TagsFilter from "./TagsFilter";
 import ViewToggle from "./ViewToggle";
 import MapView from "./MapView";
 import type { Restaurant } from "../data/Restaurant";
-import { useLocationStore } from "../hooks/useLocationStore";
+import { useLocationStore } from "../hooks/useLocationStorage";
 
 interface SearchProps {
   lat: number;
@@ -194,7 +194,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
                   disabled={isFetchingNextPage}
                   className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isFetchingNextPage ? "Carregando..." : "Mais registros"}
+                  {isFetchingNextPage ? "Carregando..." : "Mais restaurantes"}
                 </button>
               </div>
             )}

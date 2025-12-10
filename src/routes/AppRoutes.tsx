@@ -3,7 +3,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useUserStorage";
 import { ToastContainer, Bounce } from "react-toastify";
 import { SpinLoading } from "../components/SpinLoading";
-import { useLocationStore } from "../hooks/useLocationStore";
+import { useLocationStore } from "../hooks/useLocationStorage";
 
 // Lazy loading das páginas — carrega apenas quando necessário
 const LoginPage = lazy(() => import("../pages/LoginPage"));
@@ -48,33 +48,54 @@ export default function AppRoutes() {
    * useEffect para capturar a localização do usuário quando o componente monta
    */
   useEffect(() => {
-    const getUserLocation = async () => {
-      try {
-        const res = await fetch("https://ipapi.co/json");
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
-        }
-        const data = await res.json();
-
-        const latitude = Number(data.latitude);
-        const longitude = Number(data.longitude);
-        const city = data.city || "Lisboa"; // fallback
-
-        if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-          useLocationStore.getState().setLocation(latitude, longitude, city);
-          setUserLocation({ lat: latitude, log: longitude });
-        } else {
-          console.log("Coordenadas inválidas");
-          useLocationStore.getState().setLocation(0, 0, "Desconhecido");
-          setUserLocation({ lat: 0, log: 0 });
-        }
-      } catch (error: any) {
-        console.error("Erro:", error?.message ?? error);
+    const getUserLocation = () => {
+      if (!navigator.geolocation) {
+        console.error("Geolocalização não suportada");
         useLocationStore.getState().setLocation(0, 0, "Desconhecido");
         setUserLocation({ lat: 0, log: 0 });
-      } finally {
         setLoadingLocation(false);
+        return;
       }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          // Reverse geocoding para obter cidade (opcional)
+          fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              const city =
+                data.address?.city ||
+                data.address?.town ||
+                data.address?.village ||
+                "Desconhecido";
+              useLocationStore.getState().setLocation(latitude, longitude, city);
+              setUserLocation({ lat: latitude, log: longitude });
+            })
+            .catch(() => {
+              useLocationStore.getState().setLocation(latitude, longitude, "Desconhecido");
+              setUserLocation({ lat: latitude, log: longitude });
+            })
+            .finally(() => {
+              setLoadingLocation(false);
+            });
+        },
+        (error) => {
+          console.error("Erro ao obter localização:", error.message);
+          useLocationStore.getState().setLocation(0, 0, "Desconhecido");
+          setUserLocation({ lat: 0, log: 0 });
+          setLoadingLocation(false);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
+      );
     };
 
     getUserLocation();
