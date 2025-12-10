@@ -64,14 +64,14 @@ export default function AppRoutes() {
           useLocationStore.getState().setLocation(latitude, longitude, city);
           setUserLocation({ lat: latitude, log: longitude });
         } else {
-          console.warn("Coordenadas inválidas");
-          useLocationStore.getState().setLocation(48.8566, 2.3522, "Paris");
-          setUserLocation({ lat: 48.8566, log: 2.3522 });
+          console.log("Coordenadas inválidas");
+          useLocationStore.getState().setLocation(0, 0, "Desconhecido");
+          setUserLocation({ lat: 0, log: 0 });
         }
       } catch (error: any) {
         console.error("Erro:", error?.message ?? error);
-        useLocationStore.getState().setLocation(48.8566, 2.3522, "Paris");
-        setUserLocation({ lat: 48.8566, log: 2.3522 });
+        useLocationStore.getState().setLocation(0, 0, "Desconhecido");
+        setUserLocation({ lat: 0, log: 0 });
       } finally {
         setLoadingLocation(false);
       }
