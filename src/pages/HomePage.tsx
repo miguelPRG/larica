@@ -19,9 +19,13 @@ const HomePage: React.FC<HomePageProps> = ({ userLocation }) => {
 
   const handleBack = () => setSelectedRestaurant(null);
 
+  const handleLogoClick = () => {
+    setSelectedRestaurant(null);
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
+      <Header onLogoClick={handleLogoClick} />
       <main className="flex flex-1 p-4">
         {selectedRestaurant ? (
           <Detail restaurant={selectedRestaurant} onBack={handleBack} />
