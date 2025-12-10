@@ -48,7 +48,7 @@ const RestaurantItem: React.FC<RestaurantItemProps> = ({ restaurant, onClick }) 
       {/* Imagem do restaurante */}
       <div className="relative h-40 overflow-hidden">
         <img
-          src={`https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}`}
+          src= {restaurant.photos?.[0]?.photo_reference ? `https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}` : "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=400&h=300&fit=crop"}
           alt={restaurant.name}
           className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
           loading="lazy"

@@ -47,7 +47,7 @@ const Detail: React.FC<DetailProps> = ({ restaurant, onBack }) => {
 
       {/* Hero Image */}
       <div className="relative mb-8 h-64 w-full overflow-hidden rounded-3xl shadow-xl sm:h-96">
-        <img src={`https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}`} alt={restaurant.name} className="h-full w-full object-cover" />
+        <img src={ restaurant.photos?.[0]?.photo_reference ? `https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}` : "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=400&h=300&fit=crop"} alt={restaurant.name} className="h-full w-full object-cover" />
         <div className="absolute inset-0  from-black/70 via-black/20 to-transparent"></div>
         <div className="absolute bottom-0 left-0 p-6 sm:p-10">
           <h1 className="text-3xl font-extrabold text-white sm:text-5xl md:text-6xl">

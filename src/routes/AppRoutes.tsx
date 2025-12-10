@@ -62,9 +62,14 @@ export default function AppRoutes() {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
 
-          // Reverse geocoding para obter cidade (opcional)
+          // Reverse geocoding para obter cidade
           fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+            {
+              headers: {
+                "Accept-Language": "pt-PT,pt;q=0.9",
+              },
+            }
           )
             .then((res) => res.json())
             .then((data) => {
@@ -85,14 +90,14 @@ export default function AppRoutes() {
             });
         },
         (error) => {
-          console.error("Erro ao obter localização:", error.message);
+          console.error("Erro ao obter localização:", error);
           useLocationStore.getState().setLocation(0, 0, "Desconhecido");
           setUserLocation({ lat: 0, log: 0 });
           setLoadingLocation(false);
         },
         {
           enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 10000,
           maximumAge: 0,
         }
       );

@@ -83,12 +83,12 @@ const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) =>
             <Popup>
               <div className="text-center ">
                 {/* Exibe a foto do restaurante, se houver */}
-                {restaurant.photos?.[0] && (
+                
                   <img
-                    src={`https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}`}
+                    src={ restaurant.photos?.[0]?.photo_reference ? `https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}` : "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=400&h=300&fit=crop"}
                     alt={restaurant.name}
                   />
-                )}
+              
 
                 {/* Nome do restaurante */}
                 <h3 className="font-bold text-gray-800 text-sm">{restaurant.name}</h3>
