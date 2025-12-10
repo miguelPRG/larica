@@ -43,7 +43,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
     queryKey: ["restaurants", lat, log],
     queryFn: async ({ pageParam = 1 }) => {
       const response = await fetch(
-        `http://localhost:8000/restaurantes?lat=${lat}&lon=${log}&page=${pageParam}`,
+        `https://larica-backend.onrender.com/restaurantes?lat=${lat}&lon=${log}&page=${pageParam}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -116,7 +116,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
 
   return (
     <div className="w-full max-w-7xl mx-auto transition-all duration-500">
-      <Card title={`Encontre o seu restaurante em ${place}`} subtitle="Explore as 10 melhores opções gastronômicas!">
+      <Card title={`Encontre o seu restaurante em ${place}`} subtitle="Explore os melhores restaurantes da sua região por ordem de avaliações!">
         {isLoading && (
           <div className="flex justify-center items-center py-12">
             <div
