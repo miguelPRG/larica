@@ -4,8 +4,13 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/AuthContext";
 
 // Componente de Logo usando Imagem
-const LogoIcon = ({ className }: { className?: string }) => {
+const LogoIcon = ({ className, onLogoClick }: { className?: string; onLogoClick?: () => void }) => {
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    onLogoClick?.();
+    navigate("/");
+  };
 
   return (
     <img
@@ -15,7 +20,7 @@ const LogoIcon = ({ className }: { className?: string }) => {
       height={150}
       className={className}
       style={{ cursor: "pointer" }}
-      onClick={() => navigate("/")}
+      onClick={handleClick}
     />
   );
 };
@@ -63,7 +68,7 @@ const LogoutIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const Header = () => {
+const Header = ({ onLogoClick }: { onLogoClick?: () => void }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const name = useAuth((state) => state?.user?.displayName);
   const logout = useAuth((state) => state.logout);
@@ -90,7 +95,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full bg-dark-one text-light-main border-b border-dark-three">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <LogoIcon />
+        <LogoIcon onLogoClick={onLogoClick} />
 
         {/* Navegação de Desktop (Centralizada) */}
         <div className="hidden lg:flex lg:items-center lg:gap-8">
