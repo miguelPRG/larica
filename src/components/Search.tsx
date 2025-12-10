@@ -6,6 +6,7 @@ import TagsFilter from "./TagsFilter";
 import ViewToggle from "./ViewToggle";
 import MapView from "./MapView";
 import type { Restaurant } from "../data/Restaurant";
+import { useLocationStore } from "../hooks/useLocationStore";
 
 interface SearchProps {
   lat: number;
@@ -15,6 +16,7 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ lat, log, page, onSelectRestaurant }) => {
+  const place = useLocationStore((state) => state.place);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState<number>(4);
@@ -69,7 +71,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, page, onSelectRestaurant }) =
 
   return (
     <div className="w-full max-w-7xl mx-auto transition-all duration-500">
-      <Card title={`Encontre o seu restaurante em `} subtitle="Explore as 10 melhores opções gastronômicas!">
+      <Card title={`Encontre o seu restaurante em ${place}`} subtitle="Explore as 10 melhores opções gastronômicas!">
         {isLoading && (
           <div className="flex justify-center items-center py-12">
             <div
