@@ -48,11 +48,8 @@ const Detail: React.FC<DetailProps> = ({ restaurant, onBack }) => {
       {/* Hero Image */}
       <div className="relative mb-8 h-64 w-full overflow-hidden rounded-3xl shadow-xl sm:h-96">
         <img src={`https://larica-backend.onrender.com/get-image?photo_reference=${restaurant.photos?.[0]?.photo_reference}`} alt={restaurant.name} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+        <div className="absolute inset-0  from-black/70 via-black/20 to-transparent"></div>
         <div className="absolute bottom-0 left-0 p-6 sm:p-10">
-          <span className="mb-2 inline-block rounded-full bg-blue-600 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-sm">
-            {restaurant.types.join(", ")}
-          </span>
           <h1 className="text-3xl font-extrabold text-white sm:text-5xl md:text-6xl">
             {restaurant.name}
           </h1>
@@ -68,7 +65,7 @@ const Detail: React.FC<DetailProps> = ({ restaurant, onBack }) => {
             </div>
             <span className="text-sm text-gray-500 dark:text-gray-400">•</span>
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-              {restaurant.userRatingsTotal} avaliações
+              {restaurant.userRatingsTotal}
             </span>
           </div>
 
