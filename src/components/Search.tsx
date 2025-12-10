@@ -28,46 +28,37 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
-  
+
   // Verifica se as coordenadas são inválidas (0, 0)
   const hasInvalidLocation = lat === 0 && log === 0;
-  
-  const { 
-    data, 
-    isLoading, 
-    isError, 
-    hasNextPage, 
-    fetchNextPage, 
-    isFetchingNextPage,
-  } = useInfiniteQuery<PaginatedResponse>({
-    queryKey: ["restaurants", lat, log],
-    queryFn: async ({ pageParam = 1 }) => {
-      const response = await fetch(
-        `http://localhost:8000/restaurantes?lat=${lat}&lon=${log}&page=${pageParam}`,
-        {
+
+  const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery<PaginatedResponse>({
+      queryKey: ["restaurants", lat, log],
+      queryFn: async ({ pageParam = 1 }) => {
+        const response = await fetch(`http://localhost:8000/restaurantes?lat=${lat}&lon=${log}&page=${pageParam}`, {
           headers: {
             "Content-Type": "application/json",
           },
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar restaurantes");
         }
-      );
 
-      if (!response.ok) {
-        throw new Error("Erro ao buscar restaurantes");
-      }
-
-      return response.json() as Promise<PaginatedResponse>;
-    },
-    getNextPageParam: (lastPage) => {
-      // Se a página atual é menor que o total de páginas, retorna a próxima página
-      if (lastPage.pagination.currentPage < lastPage.pagination.totalPages) {
-        return lastPage.pagination.currentPage + 1;
-      }
-      // Caso contrário, retorna undefined (não há mais páginas)
-      return undefined;
-    },
-    initialPageParam: 1,
-    enabled: !hasInvalidLocation, // Só faz a query se as coordenadas forem válidas
-  });
+        return response.json() as Promise<PaginatedResponse>;
+      },
+      getNextPageParam: (lastPage) => {
+        // Se a página atual é menor que o total de páginas, retorna a próxima página
+        if (lastPage.pagination.currentPage < lastPage.pagination.totalPages) {
+          return lastPage.pagination.currentPage + 1;
+        }
+        // Caso contrário, retorna undefined (não há mais páginas)
+        return undefined;
+      },
+      initialPageParam: 1,
+      enabled: !hasInvalidLocation, // Só faz a query se as coordenadas forem válidas
+    });
 
   // Agrupa todos os restaurantes de todas as páginas
   const allRestaurants = useMemo(() => {
@@ -106,7 +97,8 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
           <div className="flex flex-col items-center justify-center py-20">
             <div className="text-9xl mb-6">😔</div>
             <p className="text-xl text-light-two text-center max-w-md">
-              Não foi possível obter a sua localização. Por favor, verifique as suas permissões ou tente novamente mais tarde.
+              Não foi possível obter a sua localização. Por favor, verifique as suas permissões ou tente novamente mais
+              tarde.
             </p>
           </div>
         </Card>
@@ -145,11 +137,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
               />
             </div>
 
-            <TagsFilter
-              cuisines={uniqueTypes}
-              selectedCuisine={selectedType}
-              onCuisineSelect={handleTypeClick}
-            />
+            <TagsFilter cuisines={uniqueTypes} selectedCuisine={selectedType} onCuisineSelect={handleTypeClick} />
 
             <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
@@ -158,11 +146,7 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
                 <>
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {filteredRestaurants.map((r) => (
-                      <RestaurantItem
-                        key={r.place_id}
-                        restaurant={r}
-                        onClick={() => onSelectRestaurant(r)}
-                      />
+                      <RestaurantItem key={r.place_id} restaurant={r} onClick={() => onSelectRestaurant(r)} />
                     ))}
                   </div>
                   {isFetchingNextPage && (
@@ -189,8 +173,8 @@ const Search: React.FC<SearchProps> = ({ lat, log, onSelectRestaurant }) => {
 
             {viewMode === "list" && hasNextPage && (
               <div className="mt-10 flex justify-center">
-                <button 
-                  onClick={() => fetchNextPage()} 
+                <button
+                  onClick={() => fetchNextPage()}
                   disabled={isFetchingNextPage}
                   className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >

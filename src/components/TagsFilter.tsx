@@ -1,4 +1,3 @@
-
 interface CuisineFilterProps {
   cuisines: string[];
   selectedCuisine: string | null;

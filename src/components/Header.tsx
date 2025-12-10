@@ -119,10 +119,7 @@ const Header = ({ onLogoClick }: { onLogoClick?: () => void }) => {
         <div className="hidden items-center gap-2 lg:flex">
           {!name ? (
             <>
-              <Link
-                to="/login"
-                className="rounded-lg px-4 py-2 text-sm font-semibold hover:bg-dark-two"
-              >
+              <Link to="/login" className="rounded-lg px-4 py-2 text-sm font-semibold hover:bg-dark-two">
                 Log In
               </Link>
               <Link
@@ -135,10 +132,7 @@ const Header = ({ onLogoClick }: { onLogoClick?: () => void }) => {
           ) : (
             <div className="flex items-center gap-4">
               <span>Olá, {name || "Usuário"}!</span>
-              <Link
-                to="/edit-profile"
-                className="rounded-lg px-4 py-2 text-sm font-semibold hover:bg-dark-two"
-              >
+              <Link to="/edit-profile" className="rounded-lg px-4 py-2 text-sm font-semibold hover:bg-dark-two">
                 Perfil
               </Link>
               <button
@@ -176,11 +170,7 @@ const Header = ({ onLogoClick }: { onLogoClick?: () => void }) => {
           className={`absolute right-0 top-0 h-full w-4/5 max-w-sm bg-dark-one p-6 ${isMenuOpen ? "translate-x-0" : "translate-x-full"} transition-transform`}
         >
           <div className="flex items-center justify-between">
-            <Link
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-              className="flex items-center gap-2"
-            >
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
               <img src={logoSimbol} alt="Larica Logo" className="h-8 w-auto" />
               <span className="text-xl font-bold">Larica</span>
             </Link>
@@ -192,11 +182,7 @@ const Header = ({ onLogoClick }: { onLogoClick?: () => void }) => {
           </div>
 
           <nav className="mt-8 flex flex-col gap-4 text-light-main">
-            <Link
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-              className="text-lg hover:text-primary-main text-left"
-            >
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-lg hover:text-primary-main text-left">
               Página Inicial
             </Link>
             <Link
@@ -234,9 +220,7 @@ const Header = ({ onLogoClick }: { onLogoClick?: () => void }) => {
                 to="/register"
                 onClick={() => setIsMenuOpen(false)}
                 className="rounded-lg bg-primary-main px-4 py-2 text-center font-semibold text-white block"
-              >
-                
-              </Link>
+              ></Link>
             </div>
           ) : (
             <div className="mt-6 flex flex-col gap-3 border-t border-dark-three pt-6">

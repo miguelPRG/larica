@@ -31,11 +31,7 @@ const HomePage: React.FC<HomePageProps> = ({ userLocation }) => {
           <Detail restaurant={selectedRestaurant} onBack={handleBack} />
         ) : (
           <div className="flex flex-1 items-center justify-center">
-              <Search
-                lat={userLocation.lat}
-                log={userLocation.log}
-                onSelectRestaurant={handleRestaurantSelect}
-              />
+            <Search lat={userLocation.lat} log={userLocation.log} onSelectRestaurant={handleRestaurantSelect} />
           </div>
         )}
       </main>

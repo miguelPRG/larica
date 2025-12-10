@@ -28,7 +28,6 @@ export default function LoginPage() {
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
   const navigate = useNavigate();
 
-
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);
     try {
@@ -45,7 +44,7 @@ export default function LoginPage() {
           pending: "Carregando ...",
           success: "Login realizado com sucesso!",
           error: {
-            render({ data }) {
+            render() {
               return "Email ou password inválidos.";
             },
           },

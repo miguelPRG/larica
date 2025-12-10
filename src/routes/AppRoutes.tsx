@@ -130,10 +130,7 @@ export default function AppRoutes() {
         />
 
         {/* Home - privada ou pública, passa a localização como prop */}
-        <Route
-          path="/"
-          element={<HomePage userLocation={userLocation} />}
-        />
+        <Route path="/" element={<HomePage userLocation={userLocation} />} />
 
         {/* Redireciona qualquer rota desconhecida para Home */}
         <Route path="*" element={<Navigate to="/" replace />} />

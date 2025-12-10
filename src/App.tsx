@@ -55,9 +55,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <Suspense
-          fallback={<SpinLoading/>}
-        >
+        <Suspense fallback={<SpinLoading />}>
           <AppRoutes />
         </Suspense>
       </Router>

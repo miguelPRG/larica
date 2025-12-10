@@ -1,4 +1,3 @@
-
 interface ViewToggleProps {
   viewMode: "list" | "map";
   setViewMode: (mode: "list" | "map") => void;

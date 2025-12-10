@@ -9,11 +9,11 @@ import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
 // Configuração do ícone padrão
 let DefaultIcon = L.icon({
-  iconUrl: icon,          // ícone do marcador
-  shadowUrl: iconShadow,  // sombra do marcador
-  iconSize: [25, 41],     // tamanho do ícone
-  iconAnchor: [12, 41],   // ponto do ícone que corresponde à posição geográfica
-  popupAnchor: [1, -34],  // ponto do popup em relação ao ícone
+  iconUrl: icon, // ícone do marcador
+  shadowUrl: iconShadow, // sombra do marcador
+  iconSize: [25, 41], // tamanho do ícone
+  iconAnchor: [12, 41], // ponto do ícone que corresponde à posição geográfica
+  popupAnchor: [1, -34], // ponto do popup em relação ao ícone
   tooltipAnchor: [16, -28],
   shadowSize: [41, 41],
 });
@@ -23,7 +23,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 // Props do componente MapView
 interface MapViewProps {
-  restaurants: Restaurant[];                       // lista de restaurantes para exibir no mapa
+  restaurants: Restaurant[]; // lista de restaurantes para exibir no mapa
   onSelectRestaurant?: (restaurant: Restaurant) => void; // callback opcional quando usuário clica em "Ver Detalhes"
 }
 
@@ -35,9 +35,7 @@ const MapUpdater: React.FC<{ restaurants: Restaurant[] }> = ({ restaurants }) =>
     if (restaurants.length === 0) return; // se não houver restaurantes, não faz nada
 
     // Cria bounds com todos os restaurantes
-    const bounds = L.latLngBounds(
-      restaurants.map((r) => [r.geometry.location.lat, r.geometry.location.lng])
-    );
+    const bounds = L.latLngBounds(restaurants.map((r) => [r.geometry.location.lat, r.geometry.location.lng]));
 
     if (restaurants.length === 1) {
       // Se houver apenas um restaurante, centraliza com zoom 16
@@ -53,21 +51,14 @@ const MapUpdater: React.FC<{ restaurants: Restaurant[] }> = ({ restaurants }) =>
 
 // Componente principal do mapa
 const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) => {
-  
   // Ponto inicial padrão (Aveiro) caso não haja restaurantes
   const defaultPosition: [number, number] = [40.6405, -8.6538];
-
-  // Função que gera a URL da foto do restaurante (Google Places)
-  const getPhotoUrl = (restaurant: Restaurant) => {
-    if (!restaurant.photos?.length) return undefined; // se não houver fotos, retorna undefined
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${restaurant.photos[0].photo_reference}&key=YOUR_GOOGLE_MAPS_API_KEY`;
-  };
 
   return (
     <div className="h-[500px] w-full overflow-hidden rounded-xl border border-gray-200 shadow-inner dark:border-gray-700 relative z-0">
       <MapContainer
-        center={defaultPosition}   // posição inicial do mapa
-        zoom={13}                  // zoom inicial
+        center={defaultPosition} // posição inicial do mapa
+        zoom={13} // zoom inicial
         style={{ height: "100%", width: "100%" }}
         className="z-0"
       >
@@ -121,6 +112,6 @@ const MapView: React.FC<MapViewProps> = ({ restaurants, onSelectRestaurant }) =>
       </MapContainer>
     </div>
   );
-}
+};
 
 export default MapView;

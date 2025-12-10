@@ -38,7 +38,7 @@ export default function EditProfilePage() {
       user: state.user,
       updateUser: state.updateUser,
       changePassword: state.changePassword,
-    }))
+    })),
   );
   const navigate = useNavigate();
 
@@ -93,7 +93,6 @@ export default function EditProfilePage() {
       );
 
       navigate("/");
-
     } catch (error) {
       console.error("Erro na atualização:", error);
     } finally {
@@ -108,11 +107,7 @@ export default function EditProfilePage() {
         (async () => {
           await delay(800);
 
-          const passwordResult = await changePassword(
-            data.currentPassword,
-            data.newPassword,
-            data.confirmPassword,
-          );
+          const passwordResult = await changePassword(data.currentPassword, data.newPassword, data.confirmPassword);
           if (!passwordResult.success) {
             throw new Error(passwordResult.message || "Erro ao alterar a senha");
           }

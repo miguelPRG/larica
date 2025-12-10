@@ -24,7 +24,11 @@ type AuthState = {
   logout: () => Promise<void>;
   initialize: () => Unsubscribe;
   updateUser: (displayName?: string, photoURL?: string) => Promise<{ success: boolean; message?: string }>;
-  changePassword: (currentPassword: string, newPassword: string, confirmPassword: string) => Promise<{ success: boolean; message?: string }>;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword: string,
+  ) => Promise<{ success: boolean; message?: string }>;
 };
 
 export const useAuth = create<AuthState>()(
@@ -133,8 +137,6 @@ export const useAuth = create<AuthState>()(
 
           return { success: true };
         } catch (error: any) {
-
-
           if (error.code === "auth/invalid-credential") {
             return { success: false, message: "Senha atual incorreta" };
           }

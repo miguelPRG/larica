@@ -14,9 +14,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
     {[1, 2, 3, 4, 5].map((star) => (
       <svg
         key={star}
-        className={`h-4 w-4 ${
-          star <= Math.round(rating) ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"
-        }`}
+        className={`h-4 w-4 ${star <= Math.round(rating) ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
         fill="currentColor"
         viewBox="0 0 20 20"
         xmlns="http://www.w3.org/2000/svg"
@@ -68,9 +66,7 @@ const RestaurantItem: React.FC<RestaurantItemProps> = ({ restaurant, onClick }) 
 
         <p className="mb-4 flex-1 text-sm text-gray-600 line-clamp-2 dark:text-gray-300">{restaurant.vicinity}</p>
 
-        <button
-          className="mt-auto w-full rounded-lg bg-blue-50 px-4 py-2 text-center text-sm font-medium text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40"
-        >
+        <button className="mt-auto w-full rounded-lg bg-blue-50 px-4 py-2 text-center text-sm font-medium text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40">
           Ver Detalhes
         </button>
       </div>

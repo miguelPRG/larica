@@ -18,6 +18,6 @@ export const useLocationStore = create<LocationState>()(
       setLocation: (lat, log, place) => set({ lat, log, place }),
       clearLocation: () => set({ lat: null, log: null, place: null }),
     }),
-    { name: "LocationStore" }
-  )
+    { name: "LocationStore" },
+  ),
 );
