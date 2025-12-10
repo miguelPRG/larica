@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import logoSimbol from "../assets/logo.png";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useUserStorage";
 
 // Componente de Logo usando Imagem
 const LogoIcon = ({ className, onLogoClick }: { className?: string; onLogoClick?: () => void }) => {

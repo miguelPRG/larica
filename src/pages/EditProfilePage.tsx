@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useUserStorage";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/shallow";

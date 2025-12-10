@@ -1,8 +1,9 @@
 import { lazy, type ReactElement, useEffect, useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useUserStorage";
 import { ToastContainer, Bounce } from "react-toastify";
 import { SpinLoading } from "../components/SpinLoading";
+import { useLocationStore } from "../hooks/useLocationStore";
 
 // Lazy loading das páginas — carrega apenas quando necessário
 const LoginPage = lazy(() => import("../pages/LoginPage"));
@@ -57,15 +58,19 @@ export default function AppRoutes() {
 
         const latitude = Number(data.latitude);
         const longitude = Number(data.longitude);
+        const city = data.city || "Lisboa"; // fallback
 
         if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+          useLocationStore.getState().setLocation(latitude, longitude, city);
           setUserLocation({ lat: latitude, log: longitude });
         } else {
-          console.warn("Coordenadas inválidas recebidas do ipapi");
+          console.warn("Coordenadas inválidas");
+          useLocationStore.getState().setLocation(48.8566, 2.3522, "Paris");
           setUserLocation({ lat: 48.8566, log: 2.3522 });
         }
       } catch (error: any) {
-        console.error("Erro ao obter localização via ipapi:", error?.message ?? error);
+        console.error("Erro:", error?.message ?? error);
+        useLocationStore.getState().setLocation(48.8566, 2.3522, "Paris");
         setUserLocation({ lat: 48.8566, log: 2.3522 });
       } finally {
         setLoadingLocation(false);
