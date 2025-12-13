@@ -58,7 +58,7 @@
 ## 📦 Instalação e Execução
 
 ### Pré-requisitos
-- **Node.js** (v16 ou superior)
+- **Node.js** (v22 ou superior)
 
 ### Método 1: Script Shell (Recomendado para Linux/WSL)
 
